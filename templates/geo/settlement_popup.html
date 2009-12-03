@@ -1,0 +1,8 @@
+<ul>
+  <li><b>Name:</b> {{settlement.name}}
+  <li><b>Type:</b> {{settlement.get_settlement_type_display}}
+  <li><b>Date Founded:</b> {% if settlement_date_founded %}{{settlement.date_founded}}{%else%}?{%endif%}
+  <li><b>Area:</b> {% if settlement.area %}{{settlement.area}}{%else%}?{%endif%} square km
+</ul>
+<a href="/settlement/{{settlement.id}}/" target="_blank">open</a>
+<a href="/settlement/{{settlement.id}}/edit" target="_blank">edit</a>

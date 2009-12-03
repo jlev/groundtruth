@@ -1,0 +1,58 @@
+body {
+    margin-left:10px;
+    margin-top:10px;
+    top:10px;
+    left:10px;
+    font-family:Verdana;
+    font-size:12pt;
+    width:1000px;
+}
+
+a {
+    color:blue;
+    text-decoration:none;
+}
+
+#top {
+    width:800px;
+    height:30px;
+    background:white;
+}
+
+h1#logo {
+    float:left;
+    width:200px;
+    font-size:18pt;
+    font-weight:bold;
+    text-align:left;
+    margin:auto;
+}
+
+#top_menu {
+    float:right;
+}
+
+#right_menu {
+    float:left;
+    width:150px;
+    background:white;
+    z-index:2000;
+}
+
+#map {
+    float:left;
+    width:800px;
+    height:600px;
+    border:1px solid black;
+}
+
+#bottom {
+    float:left;
+    clear:left;
+    font-size:10pt;
+    width:800px;
+}
+
+a.contact {
+    float:right;
+}

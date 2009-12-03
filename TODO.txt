@@ -1,0 +1,34 @@
+TODO priority:
+
+√search box
+	√ clear default value
+X	remove old searches
+()	zoom to bounds (half complete, wrong projection)
+	transliteration, geonames?
+X	routing
+
+√ olwidget admin
+	non-editable
+X	show wkt
+
+√ layer info box
+()	kml download
+
+load layers:
+√	greenline
+	oslo
+()	east jerusalem
+	more base layers?
+√	population from fmep
+		smarter loader
+
+√ source veracity
+()	fill in on load
+	generic foreign keys
+
+X edit pages/interface
+X	semantic media wiki?
+
+X simplify settlement borders at low zoom level
+X rollover names
+	

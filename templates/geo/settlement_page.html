@@ -1,0 +1,44 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>{{settlement.name}}</title>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+    <script language="javascript" type="text/javascript" src="{{MEDIA_URL}}flot/jquery.flot.min.js"></script>
+  </head>
+  <body>
+    <ul>
+      <li><b>Name:</b> {{settlement.name}} {%if settlement.alternate_name%},{{settlement.alternate_name}}{%endif%}
+      <li><b>Type:</b> {{settlement.get_settlement_type_display}}
+      <li><b>Year Founded:</b> {{settlement.year_founded|default:"unknown"}}
+      <li><b>Description:</b>{{settlement.info|linebreaks}}
+      <li><b>Legal:</b>{{settlement.legal|linebreaks}}
+      <li><b>Population:</b> <div id="populationgraph"></div>
+      {% if settlement.area %}<li><b>Area:</b>{{settlement.area}} square km{%endif%}
+      <li><b>Map:</b> <small>insert static map here</small>
+    </ul>
+    {%if citations %}
+    <b>Sources:</b>
+      <ul>
+      {%regroup citations by field as citations_grouped %}
+      {% for field in citations_grouped %}
+        <li>{{field.grouper|capfirst}}: 
+        {%for c in field.list %}
+            <a href={{c.source.url}}>{{c.source.name}}</a>
+        {%endfor%}
+      {%endfor%}
+      </ul>
+    {%endif%}<br>
+    <a href="/settlement/{{settlement.id}}/edit">edit</a>
+    
+    <script id="source" language="javascript" type="text/javascript">
+    $j = jQuery.noConflict();
+    
+    $j(function () {
+      var pop = {{settlement.population_chartstring}};
+      if (pop) {
+        $j("#populationgraph").css({'width':'600px','height':'300px'});
+        $j.plot($j("#populationgraph"), [ pop ]);
+      }
+    });
+    </script>
+  </body>
+</html>

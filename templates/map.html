@@ -1,0 +1,54 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+    <script src="{{MEDIA_URL}}openlayers/proj4js.js"></script>
+    <script src="{{MEDIA_URL}}openlayers/OpenLayers.js"></script>
+    <script src="{{MEDIA_URL}}openlayers/customLayerSwitcher.js"></script>
+    <script src="{{MEDIA_URL}}openlayers/ToolTips.js"></script>
+    <script src="{{MEDIA_URL}}openlayers/cloudmade.js"></script>
+    <script src="{{MEDIA_URL}}map/styles.js"></script>
+    <script src="{{MEDIA_URL}}map/map.js"></script>
+    
+    <link rel="stylesheet" href="{{MEDIA_URL}}styles/reset.css" type="text/css"/>
+    <link rel="stylesheet" href="{{MEDIA_URL}}styles/base.css" type="text/css"/>
+    <link rel="stylesheet" href="{{MEDIA_URL}}styles/sidebar.css" type="text/css"/>
+    <link rel="stylesheet" href="{{MEDIA_URL}}openlayers/theme/default/style.css" type="text/css" />
+    <link rel="stylesheet" href="{{MEDIA_URL}}styles/map.css" type="text/css"/>
+    <title>GroundTruth: mapping the occupation</title>
+  </head>
+  <body>
+      <div id="top">
+        <h1 id="logo">GroundTruth</h1>
+        <div id="top_menu">a dynamic map of the occupation</div>
+      </div>
+    
+      <div id="map"></div>
+      
+      <div id="right_menu">
+        <div class="right_menu_item">
+          <a id="toggle">Layers</a>
+          <div id="layerswitcher"></div>
+        </div>
+        <div class="right_menu_item">
+          <a id="toggle">Search</a>
+          <div class="search_fields">
+            <input class="defaultText" type="text" id="searchField" title="Settlement Name" />
+            <button type="submit" id="searchButton" >Go</button>
+          </div>
+        </div>
+        <div class="right_menu_item">
+          <a id="toggle">Directions</a>
+          <div class="search_fields">
+            <input class="defaultText" type="text" id="from" title="From" />
+            <input class="defaultText" type="text" id="from" title="To" />
+            <button type="submit" id="routingButton" title="Route">Go</button
+          </div>
+        </div>
+      </div>
+      
+      <div id="bottom">This site is under development
+        <a class="contact" href="http://jlev.media.mit.edu" target="_blank">jlev@media.mit.edu</a><br>
+        <a class="contact" href="/admin">login</a>
+      </div>
+  </body>
+</html>

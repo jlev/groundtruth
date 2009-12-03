@@ -1,0 +1,30 @@
+
+a.toggle {
+    margin-bottom:5px;
+}
+
+.right_menu_item {
+    margin-bottom:10px;
+    margin-left:10px;
+    padding:5px;
+    width:150px;
+    border:1px solid black;
+    font-size:10pt;
+}
+
+.search_fields{
+    text-align:right;
+}
+
+.layerinfolink {
+    text-align:right;
+}
+
+.defaultText {
+    width: 150px;
+}
+.defaultTextActive {
+    color: #a1a1a1;
+    font-style: italic;
+    font-size:9pt;
+}

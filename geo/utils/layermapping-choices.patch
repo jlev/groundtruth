@@ -1,0 +1,17 @@
+417,430c417
+<                 if model_field.choices:
+<                     found = False
+<                     for c in model_field.choices:
+<                         if (val.lower() == c[1].lower()):
+<                             val = c[0]
+<                             found = True
+<                     if (val.isspace() or val == ''):
+<                         val = "UNKWN"
+<                         found = True
+<                     if not found:
+<                         print "could not match [",val,"] to choices:"
+<                         print model_field.choices
+<                         val = raw_input('best match? ')
+<                 elif len(val) > model_field.max_length:
+---
+>                 if len(val) > model_field.max_length:

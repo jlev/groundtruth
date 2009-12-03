@@ -1,0 +1,15 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <title>{{checkpoint.name}}</title>
+  </head>
+  <body>
+    <ul>
+      <li><b>Name:</b> {%if checkpoint.name %}{{checkpoint.name}}{%else%}Unnamed{%endif%}
+      {% if checkpoint.region %}<li><b>Region:</b> {{checkpoint.region}}{%endif%}
+      <li><b>Type:</b> {{checkpoint.get_checkpoint_type_display}}
+      <li><b>Direction:</b> {{checkpoint.get_direction_display}}
+      <li><b>Staffed:</b> {% if checkpoint.staffed%}{{checkpoint.staffed}}{%else%}?{%endif%}
+    </ul>
+    map
+  </body>
+</html>

@@ -1,0 +1,18 @@
+<b>Name: </b>{{name|capfirst}}<br>
+<b>Description:</b> {{layer.description|linebreaks}}<br>
+<b>Sources:</b>
+  <ul>
+  {%regroup citations by field as citations_grouped %}
+  {% for field in citations_grouped %}
+    <li>{{field.grouper|capfirst}}: 
+    {%for c in field.list %}
+        <a href={{c.source.url}}>{{c.source.name}}</a>
+    {%endfor%}
+  {%endfor%}
+  </ul>
+{%if layer.downloadable%}
+Download as
+<a href="/{{name}}/json">JSON</a>
+<a href="/{{name}}/kml">KML</a>
+<a href="/{{name}}/shapefile">Shapefile</a>
+{%endif%}
