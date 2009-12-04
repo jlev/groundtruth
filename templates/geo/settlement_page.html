@@ -1,10 +1,8 @@
-<html xmlns="http://www.w3.org/1999/xhtml">
-  <head>
-    <title>{{settlement.name}}</title>
-    <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-    <script language="javascript" type="text/javascript" src="{{MEDIA_URL}}flot/jquery.flot.min.js"></script>
-  </head>
-  <body>
+{%extends "base.html"%}
+
+{%block title%}: {{settlement.name}} {{settlement.get_settlement_type_display}}{%endblock title%}
+
+{%block content %}
     <ul>
       <li><b>Name:</b> {{settlement.name}} {%if settlement.alternate_name%},{{settlement.alternate_name}}{%endif%}
       <li><b>Type:</b> {{settlement.get_settlement_type_display}}
@@ -28,7 +26,11 @@
       </ul>
     {%endif%}<br>
     <a href="/settlement/{{settlement.id}}/edit">edit</a>
-    
+{%endblock content%}
+ 
+    {%block scripts %}
+        <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+        <script language="javascript" type="text/javascript" src="{{MEDIA_URL}}flot/jquery.flot.min.js"></script>  
     <script id="source" language="javascript" type="text/javascript">
     $j = jQuery.noConflict();
     
@@ -40,5 +42,4 @@
       }
     });
     </script>
-  </body>
-</html>
+    {%endblock scripts%} 
