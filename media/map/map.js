@@ -177,22 +177,21 @@ function toolTipHide(feature){
 
 function showSearchMarkers(responseText) {
     response = eval('('+responseText+')');
-    tmp = response;
-    /*
-    //our bounds should come back in spherical mercator, no need to transform
-    var bounds = new OpenLayers.Bounds(response.bounds);
-    bounds.extend(new OpenLayers.LonLat(response.bounds[1][0], response.bounds[0][0]));
-    bounds.extend(new OpenLayers.LonLat(response.bounds[1][1], response.bounds[0][1]));
-    map.zoomToExtent(bounds); //.transform(epsg4326, map.getProjectionObject()));
-*/
+    
+    //our bounds come back in spherical mercator, no need to transform
+    var bounds = new OpenLayers.Bounds(response.bounds[0],response.bounds[1],
+                                       response.bounds[2],response.bounds[3]);
+    //bounds is too tight, need to extend some
+    //map.zoomToExtent(bounds);
+    
 
     //markers come back in spherical mercator
-    var markers = new OpenLayers.Layer.Markers("Search Results");
+    var markers = new OpenLayers.Layer.Markers("Search: "+response.query);
     map.addLayer(markers);
     for (var i = 0; i < response.features.length; i++) {
         var coords = response.features[i].properties.center.coordinates,
             lonlat = new OpenLayers.LonLat(coords[0], coords[1]);
-        var marker = new OpenLayers.Marker(lonlat) //.transform(israeltm, map.getProjectionObject()));
+        var marker = new OpenLayers.Marker(lonlat);
         markers.addMarker(new OpenLayers.Marker(lonlat));
     }
 }
