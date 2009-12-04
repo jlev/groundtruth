@@ -8,6 +8,7 @@ from django.utils import simplejson as json
 from django.contrib.contenttypes.models import ContentType
 
 from django.contrib.gis.gdal import SpatialReference
+from django.contrib.gis.geos import Polygon
 
 from geo.models import Barrier,Settlement,Checkpoint
 from info.models import Citation
@@ -62,9 +63,10 @@ def settlement_search_by_name(request,name):
         #better error handling
         #transliteration?
 
-    matches.geojson(precision=2,bbox=True,crs=True)
+    matches.geojson(precision=2,crs=True)
     #attach geojson attributes
     obj = {}
+    obj['query']=name
     obj['type']='FeatureCollection'
     features = []
     for s in matches:
@@ -74,7 +76,10 @@ def settlement_search_by_name(request,name):
         #
         features.append(s.get_geojson_dict(SPHERICAL_MERCATOR))
     obj['features'] = features
-    obj['bounds'] = matches.extent()
+    bounds = Polygon.from_bbox(matches.extent())
+    bounds.srid = 2039
+    bounds.transform(SPHERICAL_MERCATOR)
+    obj['bounds'] = bounds.extent
     return HttpResponse(json.dumps(obj))
     
 def settlement_popup(request,id):

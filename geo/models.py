@@ -51,6 +51,7 @@ class Settlement(models.Model):
             var.append([int(y),int(self.population[y])])
         return var
     def get_geojson_dict(self,projection):
+        self.center.transform(projection)
         return geojson_base(projection,self.boundary,
                             {'name':str(self.name),
                               'id':self.id,
