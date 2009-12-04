@@ -16,7 +16,11 @@ function initMap(){
                   numZoomLevels: 18,
                   maxResolution: 156543.0339,
                   maxExtent: new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508.34)});
-    var layer_switcher = new OpenLayers.Control.customLayerSwitcher({'div':OpenLayers.Util.getElement('layerswitcher'),activeColor:'white'});
+    var layer_switcher = new OpenLayers.Control.customLayerSwitcher({div:OpenLayers.Util.getElement('layerswitcher'),
+                                                                    //need to pass these to switcher, to avoid ie _eventcacheID failure
+                                                                    minimizeDiv:OpenLayers.Util.getElement('layerswitcher'),
+                                                                    maximizeDiv:OpenLayers.Util.getElement('layerswitcher'),
+                                                                    activeColor:'white'});
     map.addControl(layer_switcher);
     
     var cloudmade = new OpenLayers.Layer.CloudMade("OpenStreetMap", {
