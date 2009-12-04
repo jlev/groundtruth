@@ -1,14 +1,12 @@
 //DECONFLICT JQUERY AND OPENLAYERS
 $j = jQuery.noConflict();
 
-sphericalMercator = new OpenLayers.Projection("EPSG:900913");
-gps = new OpenLayers.Projection("EPSG:4326");
+var sphericalMercator = new OpenLayers.Projection("EPSG:900913");
+var gps = new OpenLayers.Projection("EPSG:4326");
 Proj4js.defs["EPSG:2039"] = '+proj=tmerc +lat_0=31.73439361111111 +lon_0=35.20451694444445 +k=1.0000067 +x_0=219529.584 +y_0=626907.39 +ellps=GRS80 +towgs84=-48,55,52,0,0,0,0 +units=m +no_defs';
-israeltm = new OpenLayers.Projection("EPSG:2039");
+var israeltm = new OpenLayers.Projection("EPSG:2039");
 
 var map,popupSelectControl,selectedFeature;
-
-var tmp; //for debugging access
 
 function initMap(){
     map = new OpenLayers.Map({'div':'map',
@@ -17,9 +15,7 @@ function initMap(){
                   units: 'm',
                   numZoomLevels: 18,
                   maxResolution: 156543.0339,
-                  maxExtent: new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508.34),
-                  //restrictedExtent: new OpenLayers.Bounds(3800000,3400000,3960000,3940000)
-    });
+                  maxExtent: new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508.34)});
     var layer_switcher = new OpenLayers.Control.customLayerSwitcher({'div':OpenLayers.Util.getElement('layerswitcher'),activeColor:'white'});
     map.addControl(layer_switcher);
     
@@ -27,8 +23,7 @@ function initMap(){
             projection:sphericalMercator,
             key: '37409ea4915a5145b85ba77588e4cea0',
             styleId: 1551, //farn 1 style, very clean
-            infoLink:'/osm/info'
-    });
+            infoLink:'/osm/info'});
     map.addLayer(cloudmade);
 
     //the json parser, defines projections to do transform automatically on load
@@ -43,13 +38,11 @@ function initMap(){
                                                    protocol: new OpenLayers.Protocol.HTTP({
                                                        api:"/border",
                                                        url: "/border/json",
-                                                       format: json_format,
-                                                       }),
+                                                       format: json_format}),
                                                    projection:israeltm,
                                                    styleMap:greenlineStyleMap,
                                                    visibility:true,
-                                                   infoLink:'/border/info'
-                                                   });
+                                                   infoLink:'/border/info'});
     map.addLayer(border);
     
     settlements = new OpenLayers.Layer.Vector("Settlements", {
@@ -57,13 +50,11 @@ function initMap(){
                                                 protocol: new OpenLayers.Protocol.HTTP({
                                                     api: "/settlement",
                                                     url: "/settlement/json",
-                                                    format: json_format,
-                                                    }),
+                                                    format: json_format}),
                                                 projection:israeltm,
                                                 styleMap:settlementStyleMap,
                                                 visibility:true,
-                                                infoLink:'/settlement/info'
-                                               });
+                                                infoLink:'/settlement/info'});
     map.addLayer(settlements);
 
     var checkpoints = new OpenLayers.Layer.Vector("Checkpoints", {
@@ -71,13 +62,11 @@ function initMap(){
                                                    protocol: new OpenLayers.Protocol.HTTP({
                                                        api:"/checkpoint",
                                                        url: "/checkpoint/json",
-                                                       format: json_format,
-                                                       }),
+                                                       format: json_format}),
                                                    projection:israeltm,
                                                    styleMap:checkpointStyleMap,
                                                    visibility:false,
-                                                   infoLink:'/checkpoint/info'
-                                                   });
+                                                   infoLink:'/checkpoint/info'});
     map.addLayer(checkpoints);
     
     var barrier = new OpenLayers.Layer.Vector("Barrier", {
@@ -85,13 +74,11 @@ function initMap(){
                                                    protocol: new OpenLayers.Protocol.HTTP({
                                                        api:"/barrier",
                                                        url: "/barrier/json",
-                                                       format: json_format,
-                                                       }),
+                                                       format: json_format}),
                                                    projection:israeltm,
                                                    styleMap:barrierStyleMap,
                                                    visibility:true,
-                                                   infoLink:'/barrier/info'
-                                                   });
+                                                   infoLink:'/barrier/info'});
     map.addLayer(barrier);
 
     toolTips = new OpenLayers.Control.ToolTips({bgColor:"white",textColor :"black", bold : true, opacity : 0.75,
@@ -111,8 +98,7 @@ function initMap(){
     popupSelectControl = new OpenLayers.Control.SelectFeature([settlements,checkpoints,barrier],
         {onSelect: onFeatureSelect,
         onUnselect: onFeatureUnselect,
-        hover:false
-        });
+        hover:false});
 	map.addControl(popupSelectControl);
 	popupSelectControl.activate();
     //fix selector root container projection
@@ -155,7 +141,7 @@ function onFeatureSelect(feature) {
         {}, null, function(request) {
             selectedFeature.popup.setContentHTML(request.responseText);
             //fill in with the ajax response
-        }, null);
+    }, null);
     map.addPopup(popup);
     //and show it only when complete
 }
