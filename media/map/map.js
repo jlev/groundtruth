@@ -29,6 +29,10 @@ function initMap(){
             styleId: 1551, //farn 1 style, very clean
             infoLink:'/osm/info'});
     map.addLayer(cloudmade);
+    
+    var yahoo = new OpenLayers.Layer.Yahoo("Yahoo Aerial",
+        {'type': YAHOO_MAP_SAT, 'sphericalMercator': true});
+    map.addLayer(yahoo);
 
     //the json parser, defines projections to do transform automatically on load
     //but doesn't actually work
