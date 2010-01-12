@@ -88,6 +88,12 @@ def settlement_popup(request,id):
         dict(settlement=s),
         context_instance = RequestContext(request))
         
+def settlements_list(request):
+    s = Settlement.objects.all()
+    return render_to_response('geo/settlements_list.html',
+        dict(settlements=s),
+        context_instance = RequestContext(request))
+
 def settlement_page(request,id):
     s = get_object_or_404(Settlement,pk=id)
     c = Citation.objects.filter(model__name="settlement")
@@ -109,6 +115,12 @@ def checkpoint_popup(request,id):
     c = get_object_or_404(Checkpoint,pk=id)
     return render_to_response('geo/checkpoint_popup.html',
         dict(checkpoint=c),
+        context_instance = RequestContext(request))
+
+def checkpoints_list(request):
+    c = Checkpoint.objects.all()
+    return render_to_response('geo/checkpoints_list.html',
+        dict(checkpoints=c),
         context_instance = RequestContext(request))
 
 def checkpoint_page(request,id):
