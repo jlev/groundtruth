@@ -36,6 +36,10 @@
       {% endblock content %}
       
       {% block scripts %}
+      <script type="text/javascript" src="http://api.maps.yahoo.com/ajaxymap?v=3.0&appid=3l51ti3V34HzYadwTu4PHZRZbw8tSzyPY715wq9eCe4WILSZybOxwfBI6s_J0HHj98ebkpk4LhzlA4fynQ--"></script>
+      <script src='http://maps.google.com/maps?file=api&amp;v={{ googleAPIVersion }}&amp;key={{ googleAPIKey }}' type="text/javascript"></script>
+      
+      
       <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
       <script type="text/javascript" src="{{MEDIA_URL}}openlayers/proj4js.js"></script>
       <script type="text/javascript" src="{{MEDIA_URL}}openlayers/OpenLayers.js"></script>
