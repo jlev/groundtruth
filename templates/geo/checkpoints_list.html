@@ -1,0 +1,46 @@
+{%extends "base.html"%}
+
+{%block title%}: Checkpoints{%endblock title%}
+
+{%block css%}
+<link rel="stylesheet" href="{{MEDIA_URL}}styles/tables.css" type="text/css"/>
+{%endblock css%}
+
+{%block content %}
+  <br>
+    <table id="checkpoints">
+      <thead>
+        <tr>
+        <td><b>Name</b></td>
+        <td><b>Region</b></td>
+        <td><b>Type</b></td>
+        <td><b>Direction</b></td>
+        <td><b>Staffed</b></td>
+        </tr>
+      </thead>
+      <tbody>
+      {% for checkpoint in checkpoints %}
+      <tr>
+        <td><a href="/checkpoint/{{checkpoint.id}}/">{%if checkpoint.name %}{{checkpoint.name}}{%else%}{{checkpoint.id}}{%endif%}</td>
+        <td>{% if checkpoint.region %}{{checkpoint.region}}{%endif%}</td>
+        <td>{{checkpoint.get_checkpoint_type_display}}</td>
+        <td>{% ifnotequal checkpoint.direction 'UNKWN' %}{{checkpoint.get_direction_display}}{%else%}{%endifnotequal%}</td>
+        <td>{% if checkpoint.staffed%}{{checkpoint.staffed}}{%endif%}</td>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+{%endblock content%}
+
+ {%block scripts %}
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+  <script type="text/javascript" src="{{MEDIA_URL}}jquery/jquery.tablesorter.min.js"></script>
+      
+  <script id="source" language="javascript" type="text/javascript">
+  $j = jQuery.noConflict();
+  
+  $j(document).ready(function(){ 
+      $j("#checkpoints").tablesorter(); 
+  });
+  </script>
+  {%endblock scripts%}
