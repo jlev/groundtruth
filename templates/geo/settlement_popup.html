@@ -1,7 +1,8 @@
 <ul>
   <li><b>Name:</b> {{settlement.name}}
   <li><b>Type:</b> {{settlement.get_settlement_type_display}}
-  <li><b>Date Founded:</b> {% if settlement_date_founded %}{{settlement.date_founded}}{%else%}?{%endif%}
+  <li><b>Population:</b> {{settlement.most_recent_population.0}} ({{settlement.most_recent_population.1}})
+  <li><b>Year Founded:</b> {% if settlement.year_founded %}{{settlement.year_founded}}{%else%}?{%endif%}
   <li><b>Area:</b> {% if settlement.area %}{{settlement.area}}{%else%}?{%endif%} square km
 </ul>
 <a href="/settlement/{{settlement.id}}/" target="_blank">open</a>
