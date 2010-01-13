@@ -1,7 +1,7 @@
 <ul>
   <li><b>Name:</b> {{settlement.name}}
   <li><b>Type:</b> {{settlement.get_settlement_type_display}}
-  <li><b>Population:</b> {{settlement.most_recent_population.0}} ({{settlement.most_recent_population.1}})
+  <li><b>Population:</b> {% if settlement.population %}{{settlement.most_recent_population.0}} ({{settlement.most_recent_population.1}}){%else%}?{%endif%}
   <li><b>Year Founded:</b> {% if settlement.year_founded %}{{settlement.year_founded}}{%else%}?{%endif%}
   <li><b>Area:</b> {% if settlement.area %}{{settlement.area}}{%else%}?{%endif%} square km
 </ul>
