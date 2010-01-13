@@ -43,6 +43,12 @@ class Settlement(models.Model):
     built_up = models.MultiPolygonField(srid=ISRAEL_TM,null=True,blank=True)
     objects = models.GeoManager()
     
+    def most_recent_population(self):
+        "returns the most recent population and year"
+        years = sorted(self.population.keys())
+        latest = years[-1]
+        pop = self.population[latest]
+        return (pop,latest)
     def population_chartstring(self):
         "returns a flot chart variable from a dictionary"
         years = sorted(self.population.keys())
