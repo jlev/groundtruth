@@ -1,5 +1,5 @@
-<b>Name: </b>{{name|capfirst}}<br>
-<b>Description:</b> {{layer.description|linebreaks}}<br>
+<div class="infoPopup">
+{{layer.description|linebreaks}}<br>
 <b>Sources:</b>
   <ul>
   {%regroup citations by field as citations_grouped %}
@@ -14,5 +14,5 @@
 Download as
 <a href="/{{name}}/json">JSON</a>
 <a href="/{{name}}/kml">KML</a>
-<a href="/{{name}}/shapefile">Shapefile</a>
 {%endif%}
+</div>
