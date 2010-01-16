@@ -106,8 +106,8 @@ OpenLayers.Control.customLayerSwitcher =
         
         OpenLayers.Event.stopObservingElement(this.div);
 
-        OpenLayers.Event.stopObservingElement(this.minimizeDiv);
-        OpenLayers.Event.stopObservingElement(this.maximizeDiv);
+        //OpenLayers.Event.stopObservingElement(this.minimizeDiv);
+        //OpenLayers.Event.stopObservingElement(this.maximizeDiv);
 
         //clear out layers info and unregister their events 
         this.clearLayersArray("base");
@@ -316,7 +316,7 @@ OpenLayers.Control.customLayerSwitcher =
                 var infoDiv = document.createElement("div");
                 if(layer.infoLink != null) {
                     var imgLoc = OpenLayers.Util.getImagesLocation() + 'info.png';
-                    infoDiv.innerHTML = "<a class='layerinfolink' href="+layer.infoLink+" target='_blank'><img src="+imgLoc+"></a>";
+                    infoDiv.innerHTML = "<a class='layerinfolink' id=layer"+i+" href="+layer.infoLink+" title='"+layer.name+"'><img src="+imgLoc+"></a>";
                 }
                 infoDiv.style.float = 'right';
                 
@@ -466,8 +466,8 @@ OpenLayers.Control.customLayerSwitcher =
      */
     showControls: function(minimize) {
 
-        this.maximizeDiv.style.display = minimize ? "" : "none";
-        this.minimizeDiv.style.display = minimize ? "none" : "";
+        //this.maximizeDiv.style.display = minimize ? "" : "none";
+        //this.minimizeDiv.style.display = minimize ? "none" : "";
 
         this.layersDiv.style.display = minimize ? "none" : "";
     },
