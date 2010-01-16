@@ -3,7 +3,7 @@ $j = jQuery.noConflict();
 
 var sphericalMercator = new OpenLayers.Projection("EPSG:900913");
 var gps = new OpenLayers.Projection("EPSG:4326");
-Proj4js.defs["EPSG:2039"] = '+proj=tmerc +lat_0=31.73439361111111 +lon_0=35.20451694444445 +k=1.0000067 +x_0=219529.584 +y_0=626907.39 +ellps=GRS80 +towgs84=-48,55,52,0,0,0,0 +units=m +no_defs';
+//Proj4js.defs["EPSG:2039"] = '+proj=tmerc +lat_0=31.73439361111111 +lon_0=35.20451694444445 +k=1.0000067 +x_0=219529.584 +y_0=626907.39 +ellps=GRS80 +towgs84=-48,55,52,0,0,0,0 +units=m +no_defs';
 var israeltm = new OpenLayers.Projection("EPSG:2039");
 
 var map,popupSelectControl,selectedFeature;
@@ -27,12 +27,16 @@ function initMap(){
             projection:sphericalMercator,
             key: '37409ea4915a5145b85ba77588e4cea0',
             styleId: 1551, //farn 1 style, very clean
-            infoLink:'/osm/info'});
+            isBaseLayer:true});
     map.addLayer(cloudmade);
     
-    var yahoo = new OpenLayers.Layer.Yahoo("Yahoo Aerial",
-        {'type': YAHOO_MAP_SAT, 'sphericalMercator': true});
-    map.addLayer(yahoo);
+    var googleSatellite = new OpenLayers.Layer.Google("Satellite",
+        {type: G_SATELLITE_MAP,sphericalMercator:true,isBaseLayer:true});
+    map.addLayer(googleSatellite);
+    
+    var googleTerrain = new OpenLayers.Layer.Google("Terrain",
+        {type: G_PHYSICAL_MAP,sphericalMercator:true,isBaseLayer:true});
+    map.addLayer(googleTerrain);
 
     //the json parser, defines projections to do transform automatically on load
     //but doesn't actually work
@@ -45,7 +49,7 @@ function initMap(){
                                                    strategies: [new OpenLayers.Strategy.Fixed()],
                                                    protocol: new OpenLayers.Protocol.HTTP({
                                                        api:"/border",
-                                                       url: "/border/json",
+                                                       url: "/border/json/",
                                                        format: json_format}),
                                                    projection:israeltm,
                                                    styleMap:greenlineStyleMap,
@@ -57,7 +61,7 @@ function initMap(){
                                                 strategies: [new OpenLayers.Strategy.Fixed()],
                                                 protocol: new OpenLayers.Protocol.HTTP({
                                                     api: "/settlement",
-                                                    url: "/settlement/json",
+                                                    url: "/settlement/json/",
                                                     format: json_format}),
                                                 projection:israeltm,
                                                 styleMap:settlementStyleMap,
@@ -69,7 +73,7 @@ function initMap(){
                                                    strategies: [new OpenLayers.Strategy.Fixed()],
                                                    protocol: new OpenLayers.Protocol.HTTP({
                                                        api:"/checkpoint",
-                                                       url: "/checkpoint/json",
+                                                       url: "/checkpoint/json/",
                                                        format: json_format}),
                                                    projection:israeltm,
                                                    styleMap:checkpointStyleMap,
@@ -81,7 +85,7 @@ function initMap(){
                                                    strategies: [new OpenLayers.Strategy.Fixed()],
                                                    protocol: new OpenLayers.Protocol.HTTP({
                                                        api:"/barrier",
-                                                       url: "/barrier/json",
+                                                       url: "/barrier/json/",
                                                        format: json_format}),
                                                    projection:israeltm,
                                                    styleMap:barrierStyleMap,
@@ -89,9 +93,10 @@ function initMap(){
                                                    infoLink:'/barrier/info'});
     map.addLayer(barrier);
 
-    toolTips = new OpenLayers.Control.ToolTips({bgColor:"white",textColor :"black", bold : true, opacity : 0.75,
+/*    toolTips = new OpenLayers.Control.ToolTips({bgColor:"white",textColor :"black", bold : true, opacity : 0.75,
 	widthValue:"100px"});
 	map.addControl(toolTips);
+*/
 
 /*	//rollover controller, hover events only
 	toolTipSelectControl = new OpenLayers.Control.SelectFeature([settlements,checkpoints,barrier],
@@ -158,7 +163,7 @@ function onFeatureUnselect(feature) {
     feature.popup.destroy();
     feature.popup = null;
 }
-
+/*
 function toolTipShow(feature) {
 	var displayText = '';
 	displayText += feature.attributes.name;
@@ -166,7 +171,7 @@ function toolTipShow(feature) {
 }
 function toolTipHide(feature){
 	toolTips.hide();
-}
+}*/
 
 
 function showSearchMarkers(responseText) {
@@ -189,49 +194,3 @@ function showSearchMarkers(responseText) {
         markers.addMarker(new OpenLayers.Marker(lonlat));
     }
 }
-
-//JQUERY ONCE PAGE LOADED
-$j(document).ready(function() {
-    initMap();
-    
-    //show and hide the layer panel
-    $j('a#toggle').click(function() {
-        $j(this).next().toggle('fast');
-        return false;
-      });
-      
-    //get search input and send to callback
-    $j("button[type=submit]#searchButton").click(function(){
-        var query = $j("input[type=text]#searchField").val();
-        if (query==$j(".defaultText")[0].title) {
-            //still default text, do nothing
-            //FIXME: this won't work if there's more than one of this class on the page
-            return false;
-        } else {
-            $j.ajax({url:'/settlement/search/'+query,
-                    success:showSearchMarkers});
-        }
-    });
-    
-    //search input box focus handler
-    $j(".defaultText").focus(function(srcc)
-    {
-        if ($j(this).val() == $j(this)[0].title)
-        {
-            $j(this).removeClass("defaultTextActive");
-            $j(this).val("");
-        }
-    });
-    $j(".defaultText").blur(function()
-    {
-        if ($j(this).val() == "")
-        {
-            $j(this).addClass("defaultTextActive");
-            $j(this).val($j(this)[0].title);
-        }
-    });
-    $j(".defaultText").blur();
-    
-    //enable jquery tooltip for infolinks in layerswitcher
-    //$j(".layerinfolink").;
-});
