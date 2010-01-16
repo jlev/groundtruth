@@ -28,7 +28,6 @@ urlpatterns += patterns('groundtruth.geo.views',
 )
 
 urlpatterns += patterns('groundtruth.info.views',
-    (r'osm/info/$','osm_popup_view'), #special case
     (r'(?P<model_name>[\w-]+)/info/$','info_popup_view'),
 )
 
