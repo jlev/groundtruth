@@ -143,7 +143,7 @@ function onFeatureSelect(feature) {
     selectedFeature = feature;
     popup = new OpenLayers.Popup("popup", 
                 feature.geometry.getBounds().getCenterLonLat(),
-                new OpenLayers.Size(200,100),
+                new OpenLayers.Size(200,125),
                 "loading...", true, onPopupClose);
     //create the popup now with blank text
     popup.panMapIfOutOfView = true;
