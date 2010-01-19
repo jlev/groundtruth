@@ -1,0 +1,38 @@
+{%extends "base.html"%}
+
+{%block title%}: Regions {%endblock title%}
+
+{%block css%}
+<link rel="stylesheet" href="{{MEDIA_URL}}styles/tables.css" type="text/css"/>
+{%endblock css%}
+
+{%block content %}
+  <br>
+    <table id="regions">
+      <thead>
+        <tr>
+        <td><b>Name</b></td>
+        </tr>
+      </thead>
+      <tbody>
+      {% for region in regions %}
+      <tr>
+        <td><a href={{region.get_absolute_url}}>{{region.name}}</a>
+      </tr>
+      {% endfor %}
+      </tbody>
+    </table>
+{%endblock content%}
+
+ {%block scripts %}
+  <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+  <script type="text/javascript" src="{{MEDIA_URL}}jquery/jquery.tablesorter.min.js"></script>
+      
+  <script id="source" language="javascript" type="text/javascript">
+  $j = jQuery.noConflict();
+  
+  $j(document).ready(function(){ 
+      $j("#regions").tablesorter(); 
+  });
+  </script>
+  {%endblock scripts%}

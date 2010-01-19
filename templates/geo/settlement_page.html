@@ -11,6 +11,7 @@
       <li><b>Legal:</b>{{settlement.legal|linebreaks}}
       <li><b>Population:</b> <div id="populationgraph"></div>
       {% if settlement.area %}<li><b>Area:</b>{{settlement.area}} square km{%endif%}
+      <li><b>Region:</b> <a href="{{settlement.region.get_absolute_url}}">{{settlement.region}}</a>
       <li><b>Map:</b> <small>insert static map here</small>
     </ul>
     {%if citations %}
