@@ -10,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.gis.gdal import SpatialReference
 from django.contrib.gis.geos import Polygon
 
-from geo.models import Barrier,Settlement,Checkpoint
+from geo.models import Barrier,Settlement,Checkpoint,Region
 from info.models import Citation
 from geo.models import geojson_base
 
@@ -104,7 +104,20 @@ def settlement_page(request,id):
 def settlement_form(request,id):
     #TODO
     return HttpResponse("not yet implemented")
-    
+
+def region_page(request,id):
+    r = get_object_or_404(Region,pk=id)
+    s = Settlement.objects.filter(region__id=id)
+    return render_to_response('geo/region_page.html',
+        dict(region=r,settlements=s),
+        context_instance = RequestContext(request))
+
+def region_list(request):
+    r = Region.objects.all()
+    return render_to_response('geo/region_list.html',
+        dict(regions=r),
+        context_instance = RequestContext(request))
+  
 def barrier_popup(request,id):
     b = get_object_or_404(Barrier,pk=id)
     return render_to_response('geo/barrier_popup.html',

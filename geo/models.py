@@ -65,6 +65,9 @@ class Settlement(models.Model):
                           })
     def __unicode__(self):
         return self.name
+    def get_absolute_url(self):
+        return "/settlement/%i/" % self.id
+
     def save(self):
         self.center = self.boundary.centroid
         self.save_base(force_insert=False, force_update=False)
@@ -74,7 +77,7 @@ class Settlement(models.Model):
 class Region(models.Model):
     #Also known as settlement bloc
     name = models.CharField('Name',max_length=50)
-    boundary = models.MultiPolygonField(srid=ISRAEL_TM)
+    boundary = models.MultiPolygonField(srid=ISRAEL_TM,null=True,blank=True)
     objects = models.GeoManager()
     def get_geojson_dict(self,projection):
            return geojson_base(projection,
@@ -83,7 +86,8 @@ class Region(models.Model):
                                'id':self.id})
     def __unicode__(self):
         return self.name
-    
+    def get_absolute_url(self):
+        return "/region/%i/" % self.id
 
 class Barrier(models.Model):
     BARRIER_MAKEUP_CHOICES = (
@@ -116,7 +120,9 @@ class Border(models.Model):
     
     def get_geojson_dict(self,projection):
         return geojson_base(projection,self.path,{})
-    
+    def __unicode__(self):
+        return self.name
+
 class Checkpoint(models.Model):
     name = models.CharField('Name',max_length=50,null=True)
     region = models.CharField('Name of the Region',max_length=50,null=True)
@@ -150,6 +156,9 @@ class Checkpoint(models.Model):
             return self.name
         else:
             return "Unnamed Checkpoint"
+    def get_absolute_url(self):
+        return "/checkpoint/%i/" % self.id
+
 
     def get_geojson_dict(self,projection):
         return geojson_base(projection,self.coords,
