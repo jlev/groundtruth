@@ -60,6 +60,7 @@ class Settlement(Locality):
     settlement_type = models.CharField('Type of Settlement',max_length=3,choices=SETTLEMENT_TYPE_CHOICES)
     year_founded = models.CharField(max_length=4,null=True,blank=True)
     evacuated = models.BooleanField(default=False)
+    url = models.URLField(null=True,blank=True)
     
     def most_recent_population(self):
         "returns the most recent population and year"
