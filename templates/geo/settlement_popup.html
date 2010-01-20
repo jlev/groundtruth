@@ -1,9 +1,10 @@
 <ul>
-  <li><b>Name:</b> {{settlement.name}}
+  <li><b>Name:</b> <a href="{{settlement.get_absolute_url}}" target="_blank">{{settlement.name}}</a>
   <li><b>Type:</b> {{settlement.get_settlement_type_display}}
   <li><b>Population:</b> {% if settlement.population %}{{settlement.most_recent_population.0}} ({{settlement.most_recent_population.1}}){%else%}?{%endif%}
   <li><b>Year Founded:</b> {% if settlement.year_founded %}{{settlement.year_founded}}{%else%}?{%endif%}
   <li><b>Area:</b> {% if settlement.area %}{{settlement.area}}{%else%}?{%endif%} square km
+  <li><b>Region:</b> <a href="{{settlement.region.get_absolute_url}}" target="_blank">{{settlement.region}}</a>
 </ul>
-<a href="/settlement/{{settlement.id}}/" target="_blank">open</a>
-<a href="/settlement/{{settlement.id}}/edit" target="_blank">edit</a>
+<a href="{{settlement.get_absolute_url}}" target="_blank">open</a>
+<a href="{{settlement.get_absolute_url}}edit" target="_blank">edit</a>

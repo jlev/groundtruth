@@ -74,6 +74,23 @@ class Settlement(Locality):
         for y in years:
             var.append([int(y),int(self.population[y])])
         return var
+    def get_geojson_dict(self,projection):
+        self.center.transform(projection)
+        return geojson_base(projection,self.boundary,
+                            {'name':str(self.name),
+                              'id':self.id,
+                              'center':eval(self.center.geojson)
+                          })
+    def __unicode__(self):
+        return self.name
+    def get_absolute_url(self):
+        return "/settlement/%i/" % self.id
+
+    def save(self):
+        self.center = self.boundary.centroid
+        self.save_base(force_insert=False, force_update=False)
+    class Meta:
+        ordering = ['name']
 
 class Palestinian(Locality):
     arabic_name = models.CharField('Arabic Name',max_length=100,null=True,blank=True)
@@ -84,7 +101,7 @@ class Palestinian(Locality):
 class Region(models.Model):
     #Also known as settlement bloc
     name = models.CharField('Name',max_length=50)
-    boundary = models.MultiPolygonField(srid=ISRAEL_TM)
+    boundary = models.MultiPolygonField(srid=ISRAEL_TM,null=True,blank=True)
     objects = models.GeoManager()
     def get_geojson_dict(self,projection):
            return geojson_base(projection,
@@ -93,6 +110,8 @@ class Region(models.Model):
                                'id':self.id})
     def __unicode__(self):
         return self.name
+    def get_absolute_url(self):
+        return "/region/%i/" % self.id
 
 class Barrier(models.Model):
     BARRIER_MAKEUP_CHOICES = (
@@ -125,7 +144,9 @@ class Border(models.Model):
     
     def get_geojson_dict(self,projection):
         return geojson_base(projection,self.path,{})
-    
+    def __unicode__(self):
+        return self.name
+
 class Checkpoint(models.Model):
     name = models.CharField('Name',max_length=50,null=True)
     region = models.CharField('Name of the Region',max_length=50,null=True)
@@ -159,6 +180,9 @@ class Checkpoint(models.Model):
             return self.name
         else:
             return "Unnamed Checkpoint"
+    def get_absolute_url(self):
+        return "/checkpoint/%i/" % self.id
+
 
     def get_geojson_dict(self,projection):
         return geojson_base(projection,self.coords,
