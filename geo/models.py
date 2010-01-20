@@ -22,6 +22,7 @@ def geojson_base(projection,the_geom,properties):
 class Locality(models.Model):
     name = models.CharField('Name',max_length=50)
     area = models.IntegerField('Area in square km',null=True,blank=True)
+    population = JSONField('Population',null=True,blank=True)
     #geographic fields
     center = models.PointField(srid=ISRAEL_TM,null=True,blank=True)
     boundary = models.MultiPolygonField(srid=ISRAEL_TM)
@@ -37,7 +38,8 @@ class Locality(models.Model):
     def __unicode__(self):
         return self.name
     def save(self):
-        self.center = self.boundary.centroid
+        if not self.boundary.empty:
+            self.center = self.boundary.centroid
         self.save_base(force_insert=False, force_update=False)
     class Meta:
         ordering = ['name']
@@ -49,7 +51,6 @@ class Settlement(Locality):
     region = models.ForeignKey('Region',blank=True,null=True)
     info = models.TextField('General Information',null=True,blank=True)
     legal = models.TextField('Legal Information',null=True,blank=True)
-    population = JSONField('Population',null=True,blank=True)
     SETTLEMENT_TYPE_CHOICES = (
         ('STL','Settlement'),
         ('EJS','East Jerusalem'),
