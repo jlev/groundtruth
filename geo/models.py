@@ -19,43 +19,14 @@ def geojson_base(projection,the_geom,properties):
     dic['crs'] = {'type':'name','properties':{'name':'EPSG:%s' % projection.srid}}
     return dic
 
-class Settlement(models.Model):
+class Locality(models.Model):
     name = models.CharField('Name',max_length=50)
-    alternate_name = models.CharField('Alternate Names',max_length=100,null=True,blank=True)
-    region = models.ForeignKey('Region',blank=True,null=True)
-    info = models.TextField('General Information',null=True,blank=True)
-    legal = models.TextField('Legal Information',null=True,blank=True)
     area = models.IntegerField('Area in square km',null=True,blank=True)
-    population = JSONField('Population',null=True,blank=True)
-    SETTLEMENT_TYPE_CHOICES = (
-        ('STL','Settlement'),
-        ('EJS','East Jerusalem'),
-        ('OUT','Outpost'),
-        ('IND','Industrial Area'),
-        ('MIL','Military Base')
-    ) #The long forms match the data from the shapefiles
-    settlement_type = models.CharField('Type of Settlement',max_length=3,choices=SETTLEMENT_TYPE_CHOICES)
-    year_founded = models.CharField(max_length=4,null=True,blank=True)
-    evacuated = models.BooleanField(default=False)
     #geographic fields
     center = models.PointField(srid=ISRAEL_TM,null=True,blank=True)
     boundary = models.MultiPolygonField(srid=ISRAEL_TM)
     built_up = models.MultiPolygonField(srid=ISRAEL_TM,null=True,blank=True)
     objects = models.GeoManager()
-    
-    def most_recent_population(self):
-        "returns the most recent population and year"
-        years = sorted(self.population.keys())
-        latest = years[-1]
-        pop = self.population[latest]
-        return (pop,latest)
-    def population_chartstring(self):
-        "returns a flot chart variable from a dictionary"
-        years = sorted(self.population.keys())
-        var = []
-        for y in years:
-            var.append([int(y),int(self.population[y])])
-        return var
     def get_geojson_dict(self,projection):
         self.center.transform(projection)
         return geojson_base(projection,self.boundary,
@@ -70,6 +41,45 @@ class Settlement(models.Model):
         self.save_base(force_insert=False, force_update=False)
     class Meta:
         ordering = ['name']
+        abstract=True
+
+class Settlement(Locality):
+    alternate_name = models.CharField('Alternate',max_length=100,null=True,blank=True)
+    hebrew_name = models.CharField('Hebrew Name',max_length=100,null=True,blank=True)
+    region = models.ForeignKey('Region',blank=True,null=True)
+    info = models.TextField('General Information',null=True,blank=True)
+    legal = models.TextField('Legal Information',null=True,blank=True)
+    population = JSONField('Population',null=True,blank=True)
+    SETTLEMENT_TYPE_CHOICES = (
+        ('STL','Settlement'),
+        ('EJS','East Jerusalem'),
+        ('OUT','Outpost'),
+        ('IND','Industrial Area'),
+        ('MIL','Military Base')
+    ) #The long forms match the data from the shapefiles
+    settlement_type = models.CharField('Type of Settlement',max_length=3,choices=SETTLEMENT_TYPE_CHOICES)
+    year_founded = models.CharField(max_length=4,null=True,blank=True)
+    evacuated = models.BooleanField(default=False)
+    
+    def most_recent_population(self):
+        "returns the most recent population and year"
+        years = sorted(self.population.keys())
+        latest = years[-1]
+        pop = self.population[latest]
+        return (pop,latest)
+    def population_chartstring(self):
+        "returns a flot chart variable from a dictionary"
+        years = sorted(self.population.keys())
+        var = []
+        for y in years:
+            var.append([int(y),int(self.population[y])])
+        return var
+
+class Palestinian(Locality):
+    arabic_name = models.CharField('Arabic Name',max_length=100,null=True,blank=True)
+    class Meta(Locality.Meta):
+        verbose_name="Palestinian Locality"
+        verbose_name_plural="Palestinian Localities"
 
 class Region(models.Model):
     #Also known as settlement bloc
@@ -83,7 +93,6 @@ class Region(models.Model):
                                'id':self.id})
     def __unicode__(self):
         return self.name
-    
 
 class Barrier(models.Model):
     BARRIER_MAKEUP_CHOICES = (
@@ -156,3 +165,4 @@ class Checkpoint(models.Model):
                             {'name':self.name,
                             'type':self.get_checkpoint_type_display(),
                             'id':self.id})
+
