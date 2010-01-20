@@ -84,9 +84,17 @@ def population():
         s.save()
         print "saved",name,d
 
-def haaretz_outposts():
-     #Loads haaretz outposts PDF
-     pass
+def outposts():
+     #Performs layermapping on outposts shapefile from PeaceNow
+        mapping = {
+            'name':'Name_eng',
+            'boundary':'Polygon'
+        }
+        shape = os.path.abspath(os.path.join(os.path.dirname(__file__), '../data/Outposts_haaretz.shp'))
+        lm = LayerMapping(Settlement,shape,mapping,
+                          transform=False)
+                          #unique='name')
+        lm.save(strict=True, verbose=True)
      
 def barrier():
     #Performs layermapping on barrier shapefile from PeaceNow
