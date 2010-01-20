@@ -3,7 +3,7 @@ from geo.utils.layermapping import LayerMapping
 from django.contrib.gis.gdal import DataSource
 from django.db.models import Q
 
-from geo.models import Settlement,Barrier,Checkpoint,Border,Region
+from geo.models import Settlement,Palestinian,Barrier,Checkpoint,Border,Region
 
 def load():
     #loads all data sources in requisite order
@@ -12,10 +12,10 @@ def load():
     east_jerusalem()
     region_borders()
     population()
-    
     checkpoints()
     barrier()
     greenline()
+    palestinian()
 
 def settlement_borders():
     #Performs layermapping on settlement borders shapefile from PeaceNow
@@ -131,3 +131,34 @@ def greenline():
                     transform=False)
     lm.save(strict=True,verbose=True)
     
+def palestinian():
+    mapping = {
+        'name':'NAME',
+        'boundary':'Polygon'
+    }
+    shape = os.path.abspath(os.path.join(os.path.dirname(__file__), '../data/palestinian-localities.shp'))
+    #lm = LayerMapping(Palestinian,shape,mapping,
+    #                transform=False)
+    #                #unique='name') #except there are lots of unnamed ones...
+    #lm.save(strict=True,verbose=True)
+    
+    #now get population from shapefile
+    years = ['2003','2004','2005','2006']
+    ds = DataSource(shape)
+    lyr = ds[0]
+    for feat in lyr:
+        feat_name = feat.get('NAME')
+        print "got",feat_name
+        matching = Palestinian.objects.filter(name__exact=feat_name)
+        if len(matching) > 1:
+            print "more than one, skipping"
+            continue
+        else:
+            pal = matching[0] #now we have the object
+            pal.population = {}
+            for y in years:
+                field_name = 'Z%s_POPUL' % (y[1:]) #truncated because of spelling error
+                year_pop = feat.get(field_name)
+                pal.population[y] = "%i" % year_pop
+            print pal.name,":",pal.population
+            pal.save()
