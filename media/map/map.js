@@ -8,6 +8,9 @@ var israeltm = new OpenLayers.Projection("EPSG:2039");
 
 var map,popupSelectControl,selectedFeature;
 
+var israelBounds = new OpenLayers.Bounds(3750000, 3400000, 4010000, 3950000);
+var worldBounds = new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508.34);
+
 function initMap(){
     map = new OpenLayers.Map({'div':'map',
                   projection: sphericalMercator,
@@ -15,7 +18,8 @@ function initMap(){
                   units: 'm',
                   numZoomLevels: 18,
                   maxResolution: 156543.0339,
-                  maxExtent: new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508.34)});
+                  maxExtent: worldBounds,
+                  restrictedExtent: israelBounds});
     var layer_switcher = new OpenLayers.Control.customLayerSwitcher({div:OpenLayers.Util.getElement('layerswitcher'),
                                                                     //need to pass these to switcher, to avoid ie _eventcacheID failure
                                                                     minimizeDiv:OpenLayers.Util.getElement('layerswitcher'),
