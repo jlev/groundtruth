@@ -1,0 +1,43 @@
+{%extends "base.html"%}
+
+{%block title%}: {{town.name}}{%endblock title%}
+
+{%block content %}
+    <ul>
+      <li><b>Name:</b> {{town.name}} {%if town.arabic_name%},{{town.arabic_name}}{%endif%}
+      <li><b>Population:</b> <div id="populationgraph"></div>
+      {% if town.area %}<li><b>Area:</b>{{town.area}} square km{%endif%}
+      <li><b>Map:</b> <small>insert static map here</small>
+    </ul>
+    {%if citations %}
+    <b>Sources:</b>
+      <ul>
+      {%regroup citations by field as citations_grouped %}
+      {% for field in citations_grouped %}
+        <li>{{field.grouper|capfirst}}: 
+        {%for c in field.list %}
+            <a href={{c.source.url}}>{{c.source.name}}</a>
+        {%endfor%}
+      {%endfor%}
+      </ul>
+    {%endif%}<br>
+    <a href="/palestinian/{{town.id}}/edit">edit</a>
+{%endblock content%}
+ 
+    {%block scripts %}
+        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
+        <script type="text/javascript" src="{{MEDIA_URL}}jquery/flot/excanvas.pack.js"></script>
+        <script type="text/javascript" src="{{MEDIA_URL}}jquery/flot/jquery.flot.min.js"></script>
+        
+    <script id="source" language="javascript" type="text/javascript">
+    $j = jQuery.noConflict();
+    
+    $j(function () {
+      var pop = {{town.population_chartstring}};
+      if (pop) {
+        $j("#populationgraph").css({'width':'600px','height':'300px'});
+        $j.plot($j("#populationgraph"), [ pop ]);
+      }
+    });
+    </script>
+    {%endblock scripts%} 

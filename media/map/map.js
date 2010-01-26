@@ -8,6 +8,9 @@ var israeltm = new OpenLayers.Projection("EPSG:2039");
 
 var map,popupSelectControl,selectedFeature;
 
+var israelBounds = new OpenLayers.Bounds(3750000, 3400000, 4010000, 3950000);
+var worldBounds = new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508.34);
+
 function initMap(){
     map = new OpenLayers.Map({'div':'map',
                   projection: sphericalMercator,
@@ -15,7 +18,8 @@ function initMap(){
                   units: 'm',
                   numZoomLevels: 18,
                   maxResolution: 156543.0339,
-                  maxExtent: new OpenLayers.Bounds(-20037508, -20037508, 20037508, 20037508.34)});
+                  maxExtent: worldBounds,
+                  restrictedExtent: israelBounds});
     var layer_switcher = new OpenLayers.Control.customLayerSwitcher({div:OpenLayers.Util.getElement('layerswitcher'),
                                                                     //need to pass these to switcher, to avoid ie _eventcacheID failure
                                                                     minimizeDiv:OpenLayers.Util.getElement('layerswitcher'),
@@ -38,6 +42,19 @@ function initMap(){
         {type: G_PHYSICAL_MAP,sphericalMercator:true,isBaseLayer:true});
     map.addLayer(googleTerrain);
 
+    //wms test
+/*    warper = new OpenLayers.Layer.WMS( "Warped",
+                        "http://warper.geothings.net/maps/wms/1841",
+                        {format: 'image/png', status: 'warped'   },
+                           {         TRANSPARENT:'true', reproject: 'true'},
+                           { gutter: 15, buffer:0},
+                           { projection:"epsg:4326", units: "m"  });
+    var opacity = .7;
+    warper.setOpacity(opacity);
+    warper.setIsBaseLayer(false);
+    map.addLayer(warper);*/
+    //end wms test
+
     //the json parser, defines projections to do transform automatically on load
     //but doesn't actually work
     json_format = new OpenLayers.Format.GeoJSON({
@@ -54,7 +71,9 @@ function initMap(){
                                                    projection:israeltm,
                                                    styleMap:greenlineStyleMap,
                                                    visibility:true,
-                                                   infoLink:'/border/info'});
+                                                   infoLink:'/border/info',
+                                                   loadingImg:true});
+    registerEvents(border);
     map.addLayer(border);
     
     settlements = new OpenLayers.Layer.Vector("Settlements", {
@@ -66,8 +85,23 @@ function initMap(){
                                                 projection:israeltm,
                                                 styleMap:settlementStyleMap,
                                                 visibility:true,
-                                                infoLink:'/settlement/info'});
+                                                infoLink:'/settlement/info',
+                                                loadingImg:true});
+    registerEvents(settlements);
     map.addLayer(settlements);
+    
+    palestinian = new OpenLayers.Layer.Vector("Palestinian Areas", {
+                                                strategies: [new OpenLayers.Strategy.Fixed()],
+                                                protocol: new OpenLayers.Protocol.HTTP({
+                                                    api: "/palestinian",
+                                                    url: "/palestinian/json/",
+                                                    format: json_format}),
+                                                projection:israeltm,
+                                                styleMap:osloAStyleMap,
+                                                visibility:false,
+                                                loadingImg:true});
+    registerEvents(palestinian);
+    map.addLayer(palestinian);
 
     var checkpoints = new OpenLayers.Layer.Vector("Checkpoints", {
                                                    strategies: [new OpenLayers.Strategy.Fixed()],
@@ -78,7 +112,9 @@ function initMap(){
                                                    projection:israeltm,
                                                    styleMap:checkpointStyleMap,
                                                    visibility:false,
-                                                   infoLink:'/checkpoint/info'});
+                                                   infoLink:'/checkpoint/info',
+                                                   loadingImg:true});
+    registerEvents(checkpoints);
     map.addLayer(checkpoints);
     
     var barrier = new OpenLayers.Layer.Vector("Barrier", {
@@ -90,7 +126,9 @@ function initMap(){
                                                    projection:israeltm,
                                                    styleMap:barrierStyleMap,
                                                    visibility:true,
-                                                   infoLink:'/barrier/info'});
+                                                   infoLink:'/barrier/info',
+                                                   loadingImg:true});
+    registerEvents(barrier);
     map.addLayer(barrier);
 
 /*    toolTips = new OpenLayers.Control.ToolTips({bgColor:"white",textColor :"black", bold : true, opacity : 0.75,
@@ -108,7 +146,7 @@ function initMap(){
 	toolTipSelectControl.activate();
 */	
 	//popup controller, click events only
-    popupSelectControl = new OpenLayers.Control.SelectFeature([settlements,checkpoints,barrier],
+    popupSelectControl = new OpenLayers.Control.SelectFeature([settlements,palestinian,checkpoints,barrier],
         {onSelect: onFeatureSelect,
         onUnselect: onFeatureUnselect,
         hover:false});
@@ -194,3 +232,13 @@ function showSearchMarkers(responseText) {
         markers.addMarker(new OpenLayers.Marker(lonlat));
     }
 }
+
+function registerEvents(layer) {
+       layer.events.register("loadstart", layer, function() {
+           $j("#"+layer.name+".loading").show();
+       });
+
+       layer.events.register("loadend", layer, function() {
+          $j("#"+layer.name+".loading").fadeOut();
+       });
+   }
