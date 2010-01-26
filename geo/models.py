@@ -13,7 +13,7 @@ def geojson_base(projection,the_geom,properties):
     dic = {}
     dic['type']='Feature'
     the_geom.transform(projection) #convert to output proj, works in place but doesn't save to db
-    dic['geometry']=eval(the_geom.geojson) #eval is necessary to get rid of string notation    
+    dic['geometry']=eval(the_geom.geojson) #eval is necessary to get rid of string notation
     dic['properties'] = properties
     #create reference system
     dic['crs'] = {'type':'name','properties':{'name':'EPSG:%s' % projection.srid}}
@@ -29,12 +29,26 @@ class Locality(models.Model):
     built_up = models.MultiPolygonField(srid=ISRAEL_TM,null=True,blank=True)
     objects = models.GeoManager()
     def get_geojson_dict(self,projection):
-        self.center.transform(projection)
-        return geojson_base(projection,self.boundary,
-                            {'name':str(self.name),
-                              'id':self.id,
-                              'center':eval(self.center.geojson)
-                          })
+        properties = {}
+        properties['name'] = str(self.name)
+        properties['id'] = self.id
+        if self.center:
+            self.center.transform(projection)
+            properties['center']=eval(self.center.geojson)
+        return geojson_base(projection,self.boundary,properties)
+    def most_recent_population(self):
+        "returns the most recent population and year"
+        years = sorted(self.population.keys())
+        latest = years[-1]
+        pop = self.population[latest]
+        return (pop,latest)
+    def population_chartstring(self):
+        "returns a flot chart variable from a dictionary"
+        years = sorted(self.population.keys())
+        var = []
+        for y in years:
+            var.append([int(y),int(self.population[y])])
+        return var
     def __unicode__(self):
         return self.name
     def save(self):
@@ -63,26 +77,6 @@ class Settlement(Locality):
     evacuated = models.BooleanField(default=False)
     url = models.URLField(null=True,blank=True)
     
-    def most_recent_population(self):
-        "returns the most recent population and year"
-        years = sorted(self.population.keys())
-        latest = years[-1]
-        pop = self.population[latest]
-        return (pop,latest)
-    def population_chartstring(self):
-        "returns a flot chart variable from a dictionary"
-        years = sorted(self.population.keys())
-        var = []
-        for y in years:
-            var.append([int(y),int(self.population[y])])
-        return var
-    def get_geojson_dict(self,projection):
-        self.center.transform(projection)
-        return geojson_base(projection,self.boundary,
-                            {'name':str(self.name),
-                              'id':self.id,
-                              'center':eval(self.center.geojson)
-                          })
     def __unicode__(self):
         return self.name
     def get_absolute_url(self):
