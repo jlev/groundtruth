@@ -10,7 +10,7 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.gis.gdal import SpatialReference
 from django.contrib.gis.geos import Polygon
 
-from geo.models import Barrier,Settlement,Checkpoint,Region
+from geo.models import Barrier,Settlement,Palestinian,Checkpoint,Region
 from info.models import Citation
 from geo.models import geojson_base
 
@@ -99,6 +99,20 @@ def settlement_page(request,id):
     c = Citation.objects.filter(model__name="settlement")
     return render_to_response('geo/settlement_page.html',
         dict(settlement=s,citations=c),
+        context_instance = RequestContext(request))
+
+
+def palestinian_page(request,id):
+    p = get_object_or_404(Palestinian,pk=id)
+    c = Citation.objects.filter(model__name="palestinian")
+    return render_to_response('geo/palestinian_page.html',
+        dict(town=p,citations=c),
+        context_instance = RequestContext(request))
+
+def palestinian_popup(request,id):
+    t = get_object_or_404(Palestinian,pk=id)
+    return render_to_response('geo/palestinian_popup.html',
+        dict(town=t),
         context_instance = RequestContext(request))
 
 def settlement_form(request,id):
