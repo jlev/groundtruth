@@ -304,7 +304,7 @@ OpenLayers.Control.customLayerSwitcher =
                 }
                 labelSpan.innerHTML = layer.name;
                 //labelSpan.style.verticalAlign = (baseLayer) ? "bottom" : "baseline";
-                labelSpan.style.width = "100px";
+                labelSpan.style.width = "125px";
                 labelSpan.style.height = "15px";
                 labelSpan.style.float = "left";
                 /*OpenLayers.Event.observe(labelSpan, "click", 
@@ -315,10 +315,21 @@ OpenLayers.Control.customLayerSwitcher =
                 //create info button
                 var infoDiv = document.createElement("div");
                 if(layer.infoLink != null) {
-                    var imgLoc = OpenLayers.Util.getImagesLocation() + 'info.png';
-                    infoDiv.innerHTML = "<a class='layerinfolink' id=layer"+i+" href="+layer.infoLink+" title='"+layer.name+"'><img src="+imgLoc+"></a>";
+                    var infoImgLog = OpenLayers.Util.getImagesLocation() + 'info.png';
+                    infoDiv.innerHTML = "<a class='layerinfolink' id=layer"+i+" href="+layer.infoLink+" title='"+layer.name+"'><img src="+infoImgLog+"></a>";
                 }
                 infoDiv.style.float = 'right';
+                
+                //loading div
+                var loadingDiv = document.createElement("div");
+                if(layer.loadingImg) {
+                    loadingDiv.className = "loading";
+                    loadingDiv.id = layer.name;
+                    var loadingImgLoc = OpenLayers.Util.getImagesLocation() + 'loading.gif';
+                    loadingDiv.innerHTML = "<img src="+loadingImgLoc+">";
+                }
+                loadingDiv.style.display = 'none'; //hide by default, turned on by events later
+                loadingDiv.style.float = 'right';
                 
                 // create line break
                 var br = document.createElement("br");
@@ -330,6 +341,7 @@ OpenLayers.Control.customLayerSwitcher =
                     'layer': layer,
                     'inputElem': inputElem,
                     'infoDiv':infoDiv,
+                    'loadingDiv':loadingDiv,
                     'labelSpan': labelSpan
                 });
                                                      
@@ -338,6 +350,7 @@ OpenLayers.Control.customLayerSwitcher =
                 groupDiv.appendChild(inputElem);
                 groupDiv.appendChild(labelSpan);
                 groupDiv.appendChild(infoDiv);
+                groupDiv.appendChild(loadingDiv);
                 groupDiv.appendChild(br);
             }
         }
