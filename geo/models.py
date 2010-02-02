@@ -38,16 +38,18 @@ class Locality(models.Model):
         return geojson_base(projection,self.boundary,properties)
     def most_recent_population(self):
         "returns the most recent population and year"
-        years = sorted(self.population.keys())
+        popDict = eval(str(self.population))
+        years = sorted(popDict.keys())
         latest = years[-1]
-        pop = self.population[latest]
+        pop = popDict[latest]
         return (pop,latest)
     def population_chartstring(self):
         "returns a flot chart variable from a dictionary"
-        years = sorted(self.population.keys())
+        popDict = eval(str(self.population))
+        years = sorted(popDict.keys())
         var = []
         for y in years:
-            var.append([int(y),int(self.population[y])])
+            var.append([int(y),int(popDict[y])])
         return var
     def __unicode__(self):
         return self.name
@@ -93,6 +95,8 @@ class Palestinian(Locality):
     class Meta(Locality.Meta):
         verbose_name="Palestinian Locality"
         verbose_name_plural="Palestinian Localities"
+    def get_absolute_url(self):
+        return "/palestinian/%i/" % self.id
 
 class Region(models.Model):
     #Also known as settlement bloc
