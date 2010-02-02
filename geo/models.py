@@ -187,6 +187,6 @@ class Checkpoint(models.Model):
     def get_geojson_dict(self,projection):
         return geojson_base(projection,self.coords,
                             {'name':self.name,
-                            'type':self.get_checkpoint_type_display(),
+                            'checkpoint_type':self.get_checkpoint_type_display(),
                             'id':self.id})
 
