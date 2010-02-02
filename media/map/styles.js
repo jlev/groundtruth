@@ -35,8 +35,8 @@ var checkpointStyleLookup = {
   "Road Gate": {externalGraphic:"/media/map/icons/checkpoint.gif"},
   "Agricultural Gate": {externalGraphic:"/media/map/icons/checkpoint.gif"}
 };
-checkpointStyleMap.addUniqueValueRules("default", "type", checkpointStyleLookup);
-checkpointStyleMap.addUniqueValueRules("select", "type", checkpointStyleLookup);
+checkpointStyleMap.addUniqueValueRules("default", "checkpoint_type", checkpointStyleLookup);
+checkpointStyleMap.addUniqueValueRules("select", "checkpoint_type", checkpointStyleLookup);
 
 var greenlineStyleMap = new OpenLayers.StyleMap({
   strokeWidth:3,

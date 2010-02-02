@@ -66,7 +66,7 @@ function initMap(){
                                                    strategies: [new OpenLayers.Strategy.Fixed()],
                                                    protocol: new OpenLayers.Protocol.HTTP({
                                                        api:"/border",
-                                                       url: "/border/json/",
+                                                       url: "/border.json",
                                                        format: json_format}),
                                                    projection:israeltm,
                                                    styleMap:greenlineStyleMap,
@@ -80,7 +80,7 @@ function initMap(){
                                                 strategies: [new OpenLayers.Strategy.Fixed()],
                                                 protocol: new OpenLayers.Protocol.HTTP({
                                                     api: "/settlement",
-                                                    url: "/settlement/json/",
+                                                    url: "/settlement.json",
                                                     format: json_format}),
                                                 projection:israeltm,
                                                 styleMap:settlementStyleMap,
@@ -94,7 +94,7 @@ function initMap(){
                                                 strategies: [new OpenLayers.Strategy.Fixed()],
                                                 protocol: new OpenLayers.Protocol.HTTP({
                                                     api: "/palestinian",
-                                                    url: "/palestinian/json/",
+                                                    url: "/palestinian.json",
                                                     format: json_format}),
                                                 projection:israeltm,
                                                 styleMap:osloAStyleMap,
@@ -107,7 +107,7 @@ function initMap(){
                                                    strategies: [new OpenLayers.Strategy.Fixed()],
                                                    protocol: new OpenLayers.Protocol.HTTP({
                                                        api:"/checkpoint",
-                                                       url: "/checkpoint/json/",
+                                                       url: "/checkpoint.json",
                                                        format: json_format}),
                                                    projection:israeltm,
                                                    styleMap:checkpointStyleMap,
@@ -121,7 +121,7 @@ function initMap(){
                                                    strategies: [new OpenLayers.Strategy.Fixed()],
                                                    protocol: new OpenLayers.Protocol.HTTP({
                                                        api:"/barrier",
-                                                       url: "/barrier/json/",
+                                                       url: "/barrier.json",
                                                        format: json_format}),
                                                    projection:israeltm,
                                                    styleMap:barrierStyleMap,
