@@ -21,7 +21,7 @@
       {%endfor%}
       </ul>
     {%endif%}<br>
-    <a href="/palestinian/{{town.id}}/edit">edit</a>
+    <a href="/admin/geo/palestinian/{{town.id}}/">edit</a>
 {%endblock content%}
  
     {%block scripts %}
@@ -36,7 +36,9 @@
       var pop = {{town.population_chartstring}};
       if (pop) {
         $j("#populationgraph").css({'width':'600px','height':'300px'});
-        $j.plot($j("#populationgraph"), [ pop ]);
+        $j.plot($j("#populationgraph"), [ pop ],
+                {xaxis: {minTickSize:1,tickDecimals:0}}
+               );
       }
     });
     </script>

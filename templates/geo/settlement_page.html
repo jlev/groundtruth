@@ -41,7 +41,9 @@
       var pop = {{settlement.population_chartstring}};
       if (pop) {
         $j("#populationgraph").css({'width':'600px','height':'300px'});
-        $j.plot($j("#populationgraph"), [ pop ]);
+        $j.plot($j("#populationgraph"), [ pop ],
+                {xaxis: {minTickSize:1,tickDecimals:0}}
+               );
       }
     });
     </script>
