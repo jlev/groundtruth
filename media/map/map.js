@@ -42,19 +42,6 @@ function initMap(){
         {type: G_PHYSICAL_MAP,sphericalMercator:true,isBaseLayer:true});
     map.addLayer(googleTerrain);
 
-    //wms test
-/*    warper = new OpenLayers.Layer.WMS( "Warped",
-                        "http://warper.geothings.net/maps/wms/1841",
-                        {format: 'image/png', status: 'warped'   },
-                           {         TRANSPARENT:'true', reproject: 'true'},
-                           { gutter: 15, buffer:0},
-                           { projection:"epsg:4326", units: "m"  });
-    var opacity = .7;
-    warper.setOpacity(opacity);
-    warper.setIsBaseLayer(false);
-    map.addLayer(warper);*/
-    //end wms test
-
     //the json parser, defines projections to do transform automatically on load
     //but doesn't actually work
     json_format = new OpenLayers.Format.GeoJSON({
