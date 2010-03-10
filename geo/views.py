@@ -97,34 +97,34 @@ def settlement_search_by_name(request,name):
     
 def settlement_popup(request,id):
     s = get_object_or_404(Settlement,pk=id)
-    return render_to_response('geo/settlement_popup.html',
+    return render_to_response('settlement_popup.html',
         dict(settlement=s),
         context_instance = RequestContext(request))
         
 def settlements_list(request):
     s = Settlement.objects.all()
-    return render_to_response('geo/settlements_list.html',
+    return render_to_response('settlements_list.html',
         dict(settlements=s),
         context_instance = RequestContext(request))
 
 def settlement_page(request,id):
     s = get_object_or_404(Settlement,pk=id)
-    c = Citation.objects.filter(model__name="settlement")
-    return render_to_response('geo/settlement_page.html',
+    c = Citation.objects.filter(cited_type__name="settlement")
+    return render_to_response('settlement_page.html',
         dict(settlement=s,citations=c),
         context_instance = RequestContext(request))
 
 
 def palestinian_page(request,id):
     p = get_object_or_404(Palestinian,pk=id)
-    c = Citation.objects.filter(model__name="palestinian")
-    return render_to_response('geo/palestinian_page.html',
+    c = Citation.objects.filter(cited_type__name="palestinian")
+    return render_to_response('palestinian_page.html',
         dict(town=p,citations=c),
         context_instance = RequestContext(request))
 
 def palestinian_popup(request,id):
     t = get_object_or_404(Palestinian,pk=id)
-    return render_to_response('geo/palestinian_popup.html',
+    return render_to_response('palestinian_popup.html',
         dict(town=t),
         context_instance = RequestContext(request))
 
@@ -141,31 +141,31 @@ def region_page(request,id):
 
 def region_list(request):
     r = Region.objects.all()
-    return render_to_response('geo/region_list.html',
+    return render_to_response('region_list.html',
         dict(regions=r),
         context_instance = RequestContext(request))
   
 def barrier_popup(request,id):
     b = get_object_or_404(Barrier,pk=id)
-    return render_to_response('geo/barrier_popup.html',
+    return render_to_response('barrier_popup.html',
         dict(barrier=b),
         context_instance = RequestContext(request))
 
 def checkpoint_popup(request,id):
     c = get_object_or_404(Checkpoint,pk=id)
-    return render_to_response('geo/checkpoint_popup.html',
+    return render_to_response('checkpoint_popup.html',
         dict(checkpoint=c),
         context_instance = RequestContext(request))
 
 def checkpoints_list(request):
     c = Checkpoint.objects.all()
-    return render_to_response('geo/checkpoints_list.html',
+    return render_to_response('checkpoints_list.html',
         dict(checkpoints=c),
         context_instance = RequestContext(request))
 
 def checkpoint_page(request,id):
     c = get_object_or_404(Checkpoint,pk=id)
-    return render_to_response('geo/checkpoint_page.html',
+    return render_to_response('checkpoint_page.html',
         dict(checkpoint=c),
         context_instance = RequestContext(request))
 
