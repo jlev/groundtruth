@@ -29,7 +29,11 @@
     <script type="text/javascript" src="{{MEDIA_URL}}map/styles.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}map/map.js"></script>
   </head>
-  <body onload="initMapCoords({{lon}},{{lat}},{{zoom}})">
+  <body onload="{% if lat and lon and zoom %}
+    initMapCoords({{lat}},{{lon}},{{zoom}});
+  {%else%}
+    initMap();
+  {%endif%}">
     <div id="map"></div>
     
     <div id="right_menu">
