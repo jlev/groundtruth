@@ -109,7 +109,7 @@ def settlements_list(request):
 
 def settlement_page(request,id):
     s = get_object_or_404(Settlement,pk=id)
-    c = Citation.objects.filter(cited_type__name="settlement")
+    c = Citation.objects.filter(model__name="settlement")
     return render_to_response('settlement_page.html',
         dict(settlement=s,citations=c),
         context_instance = RequestContext(request))
@@ -117,7 +117,7 @@ def settlement_page(request,id):
 
 def palestinian_page(request,id):
     p = get_object_or_404(Palestinian,pk=id)
-    c = Citation.objects.filter(cited_type__name="palestinian")
+    c = Citation.objects.filter(model__name="palestinian")
     return render_to_response('palestinian_page.html',
         dict(town=p,citations=c),
         context_instance = RequestContext(request))
