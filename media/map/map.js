@@ -145,6 +145,16 @@ function initMap(){
     map.setCenter(new OpenLayers.LonLat(3880000, 3755000), 9);
 }
 
+function initMapCoords(lat,lon,zoom) {
+  //note coord order
+  initMap();
+  center = new OpenLayers.LonLat(lon,lat); //lon, lat
+  //convert to map coords
+  //center.transform(gps, sphericalMercator);
+  console.log(center);
+  map.setCenter(center,zoom);
+}
+
 /*function onJSONLoad(layer,request) {
     //geojson loader for the vector layers
     var geojson_format = new OpenLayers.Format.GeoJSON();

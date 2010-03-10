@@ -17,9 +17,22 @@ from geo.models import geojson_base
 SPHERICAL_MERCATOR = SpatialReference('EPSG:900913')
 
 def map(request):
+    lat = request.GET.get('lat', '') 
+    lon = request.GET.get('lng', '')
+    zoom = request.GET.get('zoom', '')
+    print lat,lon,zoom
     return render_to_response('map.html',
+        dict(lat=lat,lon=lon,zoom=zoom),
         context_instance = RequestContext(request))
     
+def iframe(request):
+    lat = request.GET.get('lat', '') 
+    lon = request.GET.get('lng', '')
+    zoom = request.GET.get('zoom', '')
+    return render_to_response('iframe.html',
+        dict(lat=lat,lon=lon,zoom=zoom),
+        context_instance = RequestContext(request))
+
 @cache_page(15*60)
 def json_view(request,model_name,id):
     '''Generic view for geojson view of a GeoModel derived class'''
