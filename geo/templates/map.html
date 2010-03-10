@@ -15,7 +15,7 @@
       
       <div id="right_menu">
         <div class="right_menu_item">
-          <a id="toggle">Layers</a>
+          <a class="toggle">Layers</a>
           <div id="layerswitcher"></div>
         </div>
         <div class="right_menu_item">
@@ -27,11 +27,18 @@
           </div>
         </div>
         <div class="right_menu_item">
-          <a id="toggle">Directions</a>
+          <a class="toggle">Directions</a>
           <div class="search_fields">
             <input class="defaultText" type="text" id="from" title="From" />
             <input class="defaultText" type="text" id="from" title="To" />
-            <button type="submit" id="routingButton" title="Route">Go</button
+            <button type="submit" id="routingButton" title="Route">Go</button>
+          </div>
+        </div>
+        <div class="right_menu_item">
+          <a class="toggle" id="share_toggle">Share</a>
+          <div class="share_fields">
+            <input type="text" id="share_URL" />
+            <input type="text" id="share_iFrame" />
           </div>
         </div>
       </div>
@@ -51,13 +58,32 @@
       
       <script type"text/javascript">
       $j(document).ready(function() {
+        {% if lat and lon and zoom %}
+          initMapCoords({{lat}},{{lon}},{{zoom}});
+        {%else%}
           initMap();
+        {%endif%}
 
-          //show and hide the layer panel
-          $j('a#toggle').click(function() {
+          //hide the loading panels, they get reshown events registered in map.js
+          $j(".loading").hide();
+
+          //show and hide the sidebar panels
+          $j('a.toggle').click(function() {
               $j(this).next().toggle('fast');
               return false;
             });
+
+            //fill in share fields with map info
+            $j('a#share_toggle').click(function() {
+              center = map.center.clone();
+              //center.transform(sphericalMercator,gps);
+                $j('#share_iFrame').val('<iframe width="460" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://'+location.host+'/iframe/?lat='+center.lat+'&lng='+center.lon+'&zoom='+map.zoom+'"></iframe>');
+                $j('#share_URL').val('http://'+location.host+'/?lat='+center.lat+'&lng='+center.lon+'&zoom='+map.zoom);
+                return false;
+              });
+              
+              $j('a#share_toggle').next().hide();
+            //hide share by default
 
           //get search input and send to callback
           $j("button[type=submit]#searchButton").click(function(){

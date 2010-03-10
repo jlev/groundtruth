@@ -1,0 +1,42 @@
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <link rel="stylesheet" href="{{MEDIA_URL}}styles/reset.css" type="text/css"/>
+    <link rel="stylesheet" href="{{MEDIA_URL}}styles/map.css" type="text/css"/>
+    <link rel="stylesheet" href="{{MEDIA_URL}}styles/sidebar.css" type="text/css"/>
+    <style>
+    #right_menu {
+        float:left;
+        width:150px;
+        background:white;
+        z-index:2000;
+    }
+
+    #map {
+        float:left;
+        width:800px;
+        height:600px;
+        border:1px solid black;
+    }
+    </style>
+    <script src='http://maps.google.com/maps?file=api&v=2.x&key=ABQIAAAAT9uyY_WHXEyDYZHQMelCKhQWL7Q2d-EKM_00nP7XOCXIQnceqxSp4N1apl4OuUAIAe7OPscnDmbrQA'></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}openlayers/OpenLayers.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}openlayers/customLayerSwitcher.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}openlayers/cloudmade.js"></script>
+    <!-- put jQuery after OpenLayers, to avoid $ collision -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}jquery/cluetip/jquery.cluetip.js"></script>
+    <!-- finally, create our map -->
+    <script type="text/javascript" src="{{MEDIA_URL}}map/styles.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}map/map.js"></script>
+  </head>
+  <body onload="initMapCoords({{lon}},{{lat}},{{zoom}})">
+    <div id="map"></div>
+    
+    <div id="right_menu">
+      <div class="right_menu_item">
+        <a id="toggle">Layers</a>
+        <div id="layerswitcher"></div>
+      </div>
+    </div>
+  </body>
+</html>
