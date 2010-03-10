@@ -1,34 +1,34 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
+from django.contrib.contenttypes.generic import GenericForeignKey
 
+CITABLE_MODELS = {"model__in": ("settlement","region","barrier","checkpoint","border",
+                                "company","product")}
 GEO_MODELS = {"model__in": ("settlement","region","barrier","checkpoint","border")}
 
 class Source(models.Model):
     '''A name, url and date'''
     name = models.CharField('Name',max_length=50)
-    url = models.URLField()
-    date = models.DateField(null=True,blank=True)
+    author = models.CharField('Author',max_length=50,null=True,blank=True)
+    url = models.URLField(null=True,blank=True)
+    date = models.DateField(auto_now=False,null=True,blank=True)
     def __unicode__(self):
         return self.name
 
 class Citation(models.Model):
-    '''The source for a specific field in a geo model'''
+    '''Link a specific field in a particular model to a source'''
     source = models.ForeignKey(Source)
-    model = models.ForeignKey(ContentType,limit_choices_to=GEO_MODELS)
-    field = models.CharField(max_length=25,blank=True,null=True) #limited in CitationAdmin
-    #object_id = models.PositiveIntegerField()
+    cited_type = models.ForeignKey(ContentType,limit_choices_to=CITABLE_MODELS)
+    cited_field = models.CharField(max_length=25,blank=True,null=True)
+    cited_id = models.PositiveIntegerField(default=0)
+    cited_object = GenericForeignKey("cited_type","cited_id")
     def __unicode__(self):
-        return '%s: %s %s' % (self.source.name,self.model,self.field)
-    def field_choices(self):
-        '''Limits field choices to those available for the given model'''
-        model_class = self.model.model_class()
-        model_fields = model_class._meta._fields() #uses internal api, but should continue to work
-        model_fields.pop(0) #drop the pk
-        r = []
-        for f in model_fields:
-            r.append(f.name)
-        return r
-    
+        if self.cited_id == 0:
+            object_name = self.cited_type
+        else:
+            object_name = cited_object #self.model.get_object_for_this_type(id=self.cited_id)
+        return '%s: %s %s' % (self.source.name,object_name,self.cited_field)
+
 class LayerInfo(models.Model):
     '''Description for each model type in the geo application'''
     content_type = models.ForeignKey(ContentType,limit_choices_to=GEO_MODELS,unique=True)
