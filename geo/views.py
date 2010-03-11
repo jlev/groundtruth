@@ -64,35 +64,26 @@ def kml_view(request,model_name):
 def shapefile_view(request,model_name):
     return HttpResponse("not yet implemented")
     
-def settlement_search_by_name(request,name):
-    '''Search for a settlement by name.
-    Returns a geojson object of results'''
-    #TODO: make this compatible with CloudMade search API, so we can use interchangeably
-    matches = Settlement.objects.filter(name__icontains=name)
-    #should use search, but not implemented for postgres
-    if len(matches) == 0:
-        return HttpResponseNotFound("No Settlement found by that name")
-        #better error handling
-        #transliteration?
-
-    matches.geojson(precision=2,crs=True)
-    #attach geojson attributes
-    obj = {}
-    obj['query']=name
-    obj['type']='FeatureCollection'
-    features = []
-    for s in matches:
-        #only return the center point, not the whole border
-        #reduced_geojson_dict = geojson_base(s.center,{'name':str(s.name),'id':s.id})
-        #features.append(reduced_geojson_dict)
-        #
-        features.append(s.get_geojson_dict(SPHERICAL_MERCATOR))
-    obj['features'] = features
-    bounds = Polygon.from_bbox(matches.extent())
-    bounds.srid = 2039
-    bounds.transform(SPHERICAL_MERCATOR)
-    obj['bounds'] = bounds.extent
-    return HttpResponse(json.dumps(obj))
+def search(request):
+    '''Search for a settlement or Palestinian town by name.
+    Returns a list of results for jquery autocomplete'''
+    try:
+        query = request.GET['q']
+    except KeyError:
+        return HttpResponse("No query string", mimetype='text/plain')
+    settlements = Settlement.objects.filter(name__istartswith=query)
+    palestinian = Palestinian.objects.filter(name__istartswith=query)
+    
+    r = []
+    r.append("<div class='ac_header'>Settlements</div>")
+    for s in settlements:
+        geo = geojson_base(SPHERICAL_MERCATOR,s.center,{'name':str(s.name),'id':s.id})
+        r.append("%s|%s|%s" % (s.name,s.get_absolute_url(),json.dumps(geo)))
+    r.append("<div class='ac_header'>Palestinian Areas</div>")
+    for p in palestinian:
+        geo = geojson_base(SPHERICAL_MERCATOR,p.center,{'name':str(p.name),'id':p.id})
+        r.append("%s|%s|%s" % (p.name,p.get_absolute_url(),json.dumps(geo)))
+    return HttpResponse('\n'.join(r), mimetype='text/plain')
     
 def settlement_popup(request,id):
     s = get_object_or_404(Settlement,pk=id)

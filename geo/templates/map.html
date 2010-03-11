@@ -7,6 +7,7 @@
     <link rel="stylesheet" href="{{MEDIA_URL}}styles/sidebar.css" type="text/css"/>
     <link rel="stylesheet" href="{{MEDIA_URL}}openlayers/theme/default/style.css" type="text/css" />
     <link rel="stylesheet" href="{{MEDIA_URL}}jquery/cluetip/jquery.cluetip.css" type="text/css"/>
+          <link href="{{MEDIA_URL}}/jquery/autocomplete/jquery.autocomplete.css" type="text/css" media="all" rel="stylesheet" />
     <link rel="stylesheet" href="{{MEDIA_URL}}styles/map.css" type="text/css"/>
     {%endblock css%}
 
@@ -21,19 +22,21 @@
         <div class="right_menu_item">
           <a id="toggle">Search</a>
           <div class="search_fields">
-            <input class="defaultText" type="text" id="searchField" title="Settlement Name" />
-            <button type="submit" id="searchButton" >Go</button><br>
+              <form>
+              <input class="defaultText" type="text" id="search_entry" name="q" title="Location Name"/>
+              <button type="submit" id="searchButton" title="Go">Go</button>
+              </form>
             <a href="/settlement/">List all Settlements</a>
           </div>
         </div>
-        <div class="right_menu_item">
+       <!--> <div class="right_menu_item">
           <a class="toggle">Directions</a>
           <div class="search_fields">
             <input class="defaultText" type="text" id="from" title="From" />
             <input class="defaultText" type="text" id="from" title="To" />
             <button type="submit" id="routingButton" title="Route">Go</button>
           </div>
-        </div>
+        </div><-->
         <div class="right_menu_item">
           <a class="toggle" id="share_toggle">Share</a>
           <div class="share_fields">
@@ -52,9 +55,11 @@
       <!-- put jQuery after OpenLayers, to avoid $ collision -->
       <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
       <script type="text/javascript" src="{{MEDIA_URL}}jquery/cluetip/jquery.cluetip.js"></script>
+      <script type="text/javascript" src="{{MEDIA_URL}}/jquery/autocomplete/jquery.autocomplete.js"></script>
       <!-- finally, create our map -->
       <script type="text/javascript" src="{{MEDIA_URL}}map/styles.js"></script>
       <script type="text/javascript" src="{{MEDIA_URL}}map/map.js"></script>
+      
       
       <script type"text/javascript">
       $j(document).ready(function() {
@@ -63,6 +68,8 @@
         {%else%}
           initMap();
         {%endif%}
+        
+          var searchResult; //global to store search result
 
           //hide the loading panels, they get reshown events registered in map.js
           $j(".loading").hide();
@@ -85,19 +92,49 @@
               $j('a#share_toggle').next().hide();
             //hide share by default
 
-          //get search input and send to callback
-          $j("button[type=submit]#searchButton").click(function(){
-              var query = $j("input[type=text]#searchField").val();
-              if (query==$j(".defaultText")[0].title) {
-                  //still default text, do nothing
-                  //TODO: this won't work if there's more than one of this class on the page
-                  return false;
-              } else {
-                  $j.ajax({url:'/settlement/search/'+query,
-                          success:showSearchMarkers});
-              }
-          });
-
+            /* JQuery search as you type
+            */
+                $j("#search_entry").autocomplete("/search/",
+                  { cacheLength:1, multiple:false, minchars:1, mustMatch:false,
+                    highlight:false,
+                    formatItem: function(x) {
+                      return x[0];
+                    },
+                    formatResult: function(x) {
+                      if(x[1]) {
+                        //real object, with a url field
+                        return x[0];
+                      } else {
+                        //a header, return null character
+                        return "\0";
+                      }
+                    }
+                  });
+                  $j("#search_entry").result(function(event, data, formatted) {
+                    //url info is the second field in the data object
+                    if (data[1]) {
+                      $j("#search_form").attr('action',data[1]);
+                      //stash the url in the form action field
+                      $j("#search_entry").attr('name','');
+                      searchResult = eval('('+data[2]+')');
+                        //third field has the geojson, turn it into an object
+                    } else {
+                      searchResult = false;
+                    }
+                  });
+                  $j("#searchButton").click(function(){
+                    if(searchResult) {
+                      console.log(searchResult);
+                      var markers = new OpenLayers.Layer.Markers("Search Result");
+                      map.addLayer(markers);
+                      var coords = searchResult.geometry.coordinates;
+                      var lonlat = new OpenLayers.LonLat(coords[0], coords[1]);
+                      markers.addMarker(new OpenLayers.Marker(lonlat));
+                      map.zoomTo(lonlat,13); //TODO: determine zoom level dynamically
+                    }
+                    return false; //stop default action
+                  });
+                  
           //search input box focus handler
           $j(".defaultText").focus(function(srcc)
           {
