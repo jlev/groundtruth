@@ -22,10 +22,8 @@
         <div class="right_menu_item">
           <a id="toggle">Search</a>
           <div class="search_fields">
-              <form>
-              <input class="defaultText" type="text" id="search_entry" name="q" title="Location Name"/>
-              <button type="submit" id="searchButton" title="Go">Go</button>
-              </form>
+            <input class="defaultText" type="text" id="search_entry" name="q" title="Location Name"/>
+            <button type="submit" id="searchButton" title="Go">Go</button><br>
             <a href="/settlement/">List all Settlements</a>
           </div>
         </div>
@@ -69,8 +67,11 @@
           initMap();
         {%endif%}
         
-          var searchResult; //global to store search result
-
+          searchResult = false; //global to store search result
+          searchMarker = new OpenLayers.Layer.Markers("Search Result");
+          searchMarker.displayInLayerSwitcher = false;
+          map.addLayer(searchMarker);
+          
           //hide the loading panels, they get reshown events registered in map.js
           $j(".loading").hide();
 
@@ -118,21 +119,27 @@
                       $j("#search_entry").attr('name','');
                       searchResult = eval('('+data[2]+')');
                         //third field has the geojson, turn it into an object
+                        
+                      //highlight on map when you select
+                      searchMarker.clearMarkers(); //clear old results
+                      var coords = searchResult.geometry.coordinates;
+                      var lonlat = new OpenLayers.LonLat(coords[0], coords[1]);
+                      searchMarker.addMarker(new OpenLayers.Marker(lonlat));
                     } else {
                       searchResult = false;
                     }
-                  });
+                  }); 
+                    
                   $j("#searchButton").click(function(){
                     if(searchResult) {
-                      console.log(searchResult);
-                      var markers = new OpenLayers.Layer.Markers("Search Result");
-                      map.addLayer(markers);
+                      //zoom when you click go
                       var coords = searchResult.geometry.coordinates;
                       var lonlat = new OpenLayers.LonLat(coords[0], coords[1]);
-                      markers.addMarker(new OpenLayers.Marker(lonlat));
-                      map.zoomTo(lonlat,13); //TODO: determine zoom level dynamically
+                      map.setCenter(lonlat,13); //TODO: determine zoom level dynamically
                     }
-                    return false; //stop default action
+                    return false;
+                    //should stop default action
+                    //but doesn't work in Safari
                   });
                   
           //search input box focus handler
