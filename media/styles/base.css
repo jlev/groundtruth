@@ -13,6 +13,11 @@ a {
     text-decoration:none;
 }
 
+em {
+    font-weight:bold;
+    font-style:italic;
+}
+
 #top {
     width:800px;
     height:30px;

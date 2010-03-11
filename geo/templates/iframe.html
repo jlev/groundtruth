@@ -2,22 +2,52 @@
   <head>
     <link rel="stylesheet" href="{{MEDIA_URL}}styles/reset.css" type="text/css"/>
     <link rel="stylesheet" href="{{MEDIA_URL}}styles/map.css" type="text/css"/>
-    <link rel="stylesheet" href="{{MEDIA_URL}}styles/sidebar.css" type="text/css"/>
     <style>
-    #right_menu {
-        float:left;
-        width:150px;
-        background:white;
-        z-index:2000;
-    }
+        a {
+            color:blue;
+            text-decoration:none;
+        }
+    
+        #right_menu {
+            position:absolute;
+            right:0px;
+            top:0px;
+            /*width:150px;*/
+            background:white;
+            z-index:1000;
+        }
 
-    #map {
-        float:left;
-        width:800px;
-        height:600px;
-        border:1px solid black;
-    }
+        #map {
+            width:400px;
+            height:400px;
+        }
+
+        .olControlAttribution {
+            bottom:5px;
+        }
+    
+        .right_menu_item {
+            padding:5px;
+            border:1px solid black;
+            font-size:10pt;
+            /*text-align:right;*/
+        }
+    
+        #layerswitcher {
+           text-align:left;
+           width:160px; 
+        }
     </style>
+  </head>
+  <body>
+    <div id="map"></div>
+    <div id="right_menu">
+      <div class="right_menu_item">
+        <a id="toggle">Layers</a>
+        <div id="layerswitcher"></div>
+      </div>
+    </div>
+    
     <script src='http://maps.google.com/maps?file=api&v=2.x&key=ABQIAAAAT9uyY_WHXEyDYZHQMelCKhQWL7Q2d-EKM_00nP7XOCXIQnceqxSp4N1apl4OuUAIAe7OPscnDmbrQA'></script>
     <script type="text/javascript" src="{{MEDIA_URL}}openlayers/OpenLayers.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}openlayers/customLayerSwitcher.js"></script>
@@ -28,19 +58,36 @@
     <!-- finally, create our map -->
     <script type="text/javascript" src="{{MEDIA_URL}}map/styles.js"></script>
     <script type="text/javascript" src="{{MEDIA_URL}}map/map.js"></script>
-  </head>
-  <body onload="{% if lat and lon and zoom %}
-    initMapCoords({{lat}},{{lon}},{{zoom}});
-  {%else%}
-    initMap();
-  {%endif%}">
-    <div id="map"></div>
     
-    <div id="right_menu">
-      <div class="right_menu_item">
-        <a id="toggle">Layers</a>
-        <div id="layerswitcher"></div>
-      </div>
-    </div>
+    <script type="text/javascript">
+     $j(document).ready(function() {
+        {% if lat and lon and zoom %}initMapCoords({{lat}},{{lon}},{{zoom}});
+        {%else%}initMap();{%endif%}
+        
+          //hide the loading panels
+          $j(".loading").hide();
+
+          //show and hide the sidebar panels
+          $j('a#toggle').click(function() {
+              $j(this).next().toggle('fast');
+              return false;
+            });
+          $j('#layerswitcher').hide();
+            
+            //popup cluetips in layerswitcher
+            $j(".layerinfolink").cluetip({
+              sticky: true,
+              closePosition:'title',
+              closeText:'X',
+              cluezIndex:1100,
+              ajaxCache:true,
+              cluetipClass:'jtip',
+              dropShadow:false,
+              activation:'click',
+              attribute:'href',
+            });
+        });
+    </script>
+    
   </body>
 </html>
