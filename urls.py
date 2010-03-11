@@ -10,11 +10,15 @@ urlpatterns = patterns('',
     (r'^admin/', include(admin.site.urls))
 )
 
+#tagging urls
+#urlpatterns += patterns('',
+#    (r'^autocomplete/', include('autocomplete.urls'))
+#)
 
 #app urls
 urlpatterns += patterns('',
+    (r'', include('info.urls')),
     (r'', include('geo.urls')),
-    (r'^info/', include('info.urls')),
 )
 
 #let django serve the static media when in debug mode
