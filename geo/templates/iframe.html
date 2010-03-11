@@ -62,7 +62,7 @@
     <script type="text/javascript">
      $j(document).ready(function() {
         {% if lat and lon and zoom %}initMapCoords({{lat}},{{lon}},{{zoom}});
-        {%else%}initMap();{%endif%}
+        {%else%}initMap(); map.zoomTo(8); {%endif%}
         
           //hide the loading panels
           $j(".loading").hide();
