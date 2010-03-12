@@ -75,11 +75,13 @@ def search(request):
     palestinian = Palestinian.objects.filter(name__istartswith=query)
     
     r = []
-    r.append("<div class='ac_header'>Settlements</div>")
+    if len(settlements) > 0:
+        r.append("<div class='ac_header'>Settlements</div>")
     for s in settlements:
         geo = geojson_base(SPHERICAL_MERCATOR,s.center,{'name':str(s.name),'id':s.id})
         r.append("%s|%s|%s" % (s.name,s.get_absolute_url(),json.dumps(geo)))
-    r.append("<div class='ac_header'>Palestinian Areas</div>")
+    if len(palestinian) > 0:
+        r.append("<div class='ac_header'>Palestinian Areas</div>")
     for p in palestinian:
         geo = geojson_base(SPHERICAL_MERCATOR,p.center,{'name':str(p.name),'id':p.id})
         r.append("%s|%s|%s" % (p.name,p.get_absolute_url(),json.dumps(geo)))
