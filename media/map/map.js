@@ -19,7 +19,7 @@ function initMap(){
                   numZoomLevels: 18,
                   maxResolution: 156543.0339,
                   maxExtent: worldBounds,
-                  restrictedExtent: israelBounds});
+                 /* restrictedExtent: israelBounds */});
     var layer_switcher = new OpenLayers.Control.customLayerSwitcher({div:OpenLayers.Util.getElement('layerswitcher'),
                                                                     //need to pass these to switcher, to avoid ie _eventcacheID failure
                                                                     minimizeDiv:OpenLayers.Util.getElement('layerswitcher'),
