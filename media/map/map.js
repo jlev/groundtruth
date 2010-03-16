@@ -151,7 +151,6 @@ function initMapCoords(lat,lon,zoom) {
   center = new OpenLayers.LonLat(lon,lat); //lon, lat
   //convert to map coords
   center.transform(gps, sphericalMercator);
-  console.log(center);
   map.setCenter(center,zoom);
 }
 

@@ -2,21 +2,45 @@
 
 {%block title%}: {{settlement.name}} {{settlement.get_settlement_type_display}}{%endblock title%}
 
+{%block css%}
+<style>
+    #mapwrapper {
+      width:600px;
+    }
+
+    #map {
+        width:400px;
+        height:400px;
+    }
+
+    .olControlAttribution {
+        bottom:5px;
+    }
+
+    #layerswitcher {
+       text-align:left;
+       width:200px;
+       display:inline;
+       font-size:10pt;
+    }
+</style>
+{%endblock%}
+
 {%block content %}
     <ul>
       <li><b>Name:</b> {{settlement.name}} {%if settlement.alternate_name%},{{settlement.alternate_name}}{%endif%}
       <li><b>Type:</b> {{settlement.get_settlement_type_display}}
       <li><b>Year Founded:</b> {{settlement.year_founded|default:"unknown"}}
       <li><b>Description:</b>{{settlement.info|linebreaks}}
-      <li><b>Legal:</b>{{settlement.legal|linebreaks}}
-      <li><b>Population:</b> <div id="populationgraph"></div>
-      {% if settlement.area %}<li><b>Area:</b>{{settlement.area}} square km{%endif%}
       <li><b>Region:</b> <a href="{{settlement.region.get_absolute_url}}">{{settlement.region}}</a>
-      <li><b>Map:</b> <small>insert static map here</small>
+      <li><b>Population:</b> {% if settlement.population %}<div id="populationgraph"></div>{%else%}Unknown{%endif%}
+      {% if settlement.area %}<li><b>Area:</b>{{settlement.area}} square km{%endif%}
+      <li><b>Map:</b><div id="mapwrapper"><div id="map"></div><div id="layerswitcher"><b>Layers</b></div></li>
+      <li><b>Legal:</b>{{settlement.legal|linebreaks}}
     </ul>
     {%if citations %}
-    <b>Sources:</b>
-      <ul>
+    <ul>
+      <li><b>Sources:</b></li>
       {%regroup citations by field as citations_grouped %}
       {% for field in citations_grouped %}
         <li>{{field.grouper|capfirst}}: 
@@ -26,18 +50,43 @@
       {%endfor%}
       </ul>
     {%endif%}<br>
-    <a href="/settlement/{{settlement.id}}/edit">edit</a>
 {%endblock content%}
  
     {%block scripts %}
-        <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.3.2/jquery.min.js"></script>
-        <script type="text/javascript" src="{{MEDIA_URL}}jquery/flot/excanvas.pack.js"></script>
-        <script type="text/javascript" src="{{MEDIA_URL}}jquery/flot/jquery.flot.min.js"></script>
+    <script src='http://maps.google.com/maps?file=api&v=2.x&key=ABQIAAAAT9uyY_WHXEyDYZHQMelCKhQWL7Q2d-EKM_00nP7XOCXIQnceqxSp4N1apl4OuUAIAe7OPscnDmbrQA'></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}openlayers/OpenLayers.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}openlayers/customLayerSwitcher.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}openlayers/cloudmade.js"></script>
+    <!-- put jQuery after OpenLayers, to avoid $ collision -->
+    <script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}jquery/cluetip/jquery.cluetip.js"></script>
+    <!-- charting stuff -->
+    <script type="text/javascript" src="{{MEDIA_URL}}jquery/flot/excanvas.pack.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}jquery/flot/jquery.flot.min.js"></script>
+    <!-- finally, create our map -->
+    <script type="text/javascript" src="{{MEDIA_URL}}map/styles.js"></script>
+    <script type="text/javascript" src="{{MEDIA_URL}}map/map.js"></script>
+    
         
     <script id="source" language="javascript" type="text/javascript">
     $j = jQuery.noConflict();
     
-    $j(function () {
+    $j(document).ready(function() {
+      //first, override some of the style attributes
+      //settlementStyleMap.fillOpacity = 0;
+      //osloAStyleMap.fillOpacity = 0;
+      
+      var zoom = 14; //todo: determine zoom level dynamically
+      var settlement = {{geojson|safe}};
+      console.log(settlement);
+      var center = new OpenLayers.LonLat(settlement.geometry.coordinates[0],settlement.geometry.coordinates[1]);
+      initMap();
+      map.setCenter(center, zoom);
+      
+      //deactivate the popup controller
+      //popupSelectControl.deactivate();
+      
+      {% if settlement.population %}
       var pop = {{settlement.population_chartstring}};
       if (pop) {
         $j("#populationgraph").css({'width':'600px','height':'300px'});
@@ -45,6 +94,7 @@
                 {xaxis: {minTickSize:1,tickDecimals:0}}
                );
       }
+      {% endif %}
     });
     </script>
     {%endblock scripts%} 

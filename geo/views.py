@@ -102,8 +102,9 @@ def settlements_list(request):
 def settlement_page(request,id):
     s = get_object_or_404(Settlement,pk=id)
     c = Citation.objects.filter(model__name="settlement")
+    geo = geojson_base(SPHERICAL_MERCATOR,s.center,{'name':str(s.name),'id':s.id})
     return render_to_response('settlement_page.html',
-        dict(settlement=s,citations=c),
+        dict(settlement=s,citations=c,geojson=json.dumps(geo)),
         context_instance = RequestContext(request))
 
 

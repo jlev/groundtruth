@@ -61,3 +61,13 @@ h1#logo {
 a.contact {
     float:right;
 }
+
+ul {
+    float:left;
+    clear:left;
+}
+
+ul li { 
+    float:left;
+    clear:left;
+}
