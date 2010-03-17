@@ -185,7 +185,7 @@ def settlement_form(request,id):
 def region_page(request,id):
     r = get_object_or_404(Region,pk=id)
     s = Settlement.objects.filter(region__id=id)
-    return render_to_response('geo/region_page.html',
+    return render_to_response('region_page.html',
         dict(region=r,settlements=s),
         context_instance = RequestContext(request))
 
