@@ -60,8 +60,9 @@ h1#logo a:hover {
 }
 
 #bottom {
-    float:left;
-    clear:left;
+    position:absolute;
+    bottom:5px;
+    left:5px;
     font-size:10pt;
     width:800px;
 }
