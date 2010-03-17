@@ -40,6 +40,12 @@
           <div class="share_fields">
             <input type="text" id="share_URL" />
             <input type="text" id="share_iFrame" />
+            <!-- AddThis Button BEGIN -->
+            <div class="addthis_toolbox addthis_default_style">
+            <a href="http://www.addthis.com/bookmark.php?v=250&amp;username=jlev" class="addthis_button_compact">Send to friends</a>
+            </div>
+            <script type="text/javascript" src="http://s7.addthis.com/js/250/addthis_widget.js#username=jlev"></script>
+            <!-- AddThis Button END -->
           </div>
         </div>
       </div>
@@ -81,17 +87,14 @@
               return false;
             });
 
-            //fill in share fields with map info
-            $j('a#share_toggle').click(function() {
-              center = map.center.clone();
-              center.transform(sphericalMercator,gps);
+            //fill in share fields with map info, updating on every map move
+              function mapCoordsToShareFields(e) {
+                var center = map.center.clone();
+                center.transform(sphericalMercator,gps);
                 $j('#share_iFrame').val('<iframe width="460" height="350" frameborder="0" scrolling="no" marginheight="0" marginwidth="0" src="http://'+location.host+'/iframe/?lat='+center.lat+'&lng='+center.lon+'&zoom='+map.zoom+'"></iframe>');
                 $j('#share_URL').val('http://'+location.host+'/?lat='+center.lat+'&lng='+center.lon+'&zoom='+map.zoom);
-                return false;
-              });
-              
-              $j('a#share_toggle').next().hide();
-            //hide share by default
+              }
+              map.events.register( 'moveend', this, mapCoordsToShareFields);
 
             /* JQuery search as you type
             */
