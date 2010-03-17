@@ -10,11 +10,15 @@ from django.contrib.contenttypes.models import ContentType
 from django.contrib.gis.gdal import SpatialReference
 from django.contrib.gis.geos import Polygon
 
+from django.contrib.gis.shortcuts import render_to_kml
+
 from geo.models import Barrier,Settlement,Palestinian,Checkpoint,Region
 from info.models import Citation
 from geo.models import geojson_base
 
 SPHERICAL_MERCATOR = SpatialReference('EPSG:900913')
+ISRAEL_TM = SpatialReference('EPSG:2039')
+LAT_LON = SpatialReference('EPSG:4326')
 
 def map(request):
     lat = request.GET.get('lat', '') 
@@ -58,8 +62,61 @@ def json_view(request,model_name,id):
     obj['features'] = features
     return HttpResponse(json.dumps(obj))
 
-def kml_view(request,model_name):
-    return HttpResponse("not yet implemented")
+@cache_page(15*60)
+def kml_view(request,model_name,id):
+    try:
+        model_class = ContentType.objects.get(model=model_name).model_class()
+    except ObjectDoesNotExist,e:
+        return HttpResponse('no content exists for the model named [%s]}' % model_name)
+
+    if id.lower() == 'all':
+        objects = model_class.objects.filter().kml()
+    else:
+        objects = model_class.objects.filter(pk=id).kml()
+    
+    places = []
+    for o in objects:
+        p = {}
+        if model_name == "settlement":
+            p['name'] = o.name
+            p['description'] =  "Settlement Type: %s \n" % o.get_settlement_type_display()
+            if o.info: p['description'] += ('Description: %s \n' % o.info)
+            if o.population:
+                pop = o.most_recent_population()
+                p['description'] += ('Population: %s (%s)\n' % (pop[0],pop[1]))
+            if o.year_founded: p['description'] += ('Year Founded: %s \n' % o.year_founded)
+            if o.year_founded: p['description'] += ('Region: %s \n' % o.region)
+            b = o.boundary.transform(LAT_LON,True) #have to transform boundary kml explicitly
+            p['kml'] = b.kml
+            p['style'] = 'settlement'
+        if model_name == "palestinian":
+            p['name'] = o.name
+            p['description'] = "Palestinian Area: %s\n" % o.name
+            if o.population:
+                pop = o.most_recent_population()
+                p['description'] += ('Population: %s (%s)\n' % (pop[0],pop[1]))
+            b = o.boundary.transform(LAT_LON,True)
+            p['kml'] = b.kml
+            p['style'] = 'palestinian'
+        if model_name == "barrier":
+            p['description'] = "%s\n%s" % (o.get_makeup_display(),o.get_construction_display())
+            b = o.path.transform(LAT_LON,True) #have to transform boundary kml explicitly
+            p['kml'] = b.kml
+            p['style'] = 'barrier'
+        if model_name == "border":
+            b =  o.path.transform(LAT_LON,True) #have to transform boundary kml explicitly
+            p['kml'] = b.kml
+            p['style'] = 'border'
+        if model_name == "checkpoint":
+            p['name'] = o.name
+            p['description'] = "%s\n%s" % (o.get_checkpoint_type_display(),o.get_direction_display())
+            b = o.coords.transform(LAT_LON,True) #have to transform boundary kml explicitly
+            p['kml'] = b.kml
+            p['style'] = 'checkpoint'
+        places.append(p)
+    
+    return render_to_kml("output.kml", {'places' : places, 'name':model_name})
+    #return HttpResponse("not yet implemented")
     
 def shapefile_view(request,model_name):
     return HttpResponse("not yet implemented")
