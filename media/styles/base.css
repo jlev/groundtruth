@@ -33,6 +33,14 @@ h1#logo {
     margin:auto;
 }
 
+h1#logo a {
+    color:black;
+}
+
+h1#logo a:hover {
+    color:red;
+}
+
 #top_menu {
     float:right;
 }
