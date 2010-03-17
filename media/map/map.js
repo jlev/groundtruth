@@ -77,7 +77,7 @@ function initMap(){
     registerEvents(settlements);
     map.addLayer(settlements);
     
-    palestinian = new OpenLayers.Layer.Vector("Palestinian Areas", {
+    palestinian = new OpenLayers.Layer.Vector("Palestinian Towns", {
                                                 strategies: [new OpenLayers.Strategy.Fixed()],
                                                 protocol: new OpenLayers.Protocol.HTTP({
                                                     api: "/palestinian",
@@ -232,10 +232,14 @@ function showSearchMarkers(responseText) {
 
 function registerEvents(layer) {
        layer.events.register("loadstart", layer, function() {
-           $j("#"+layer.name+".loading").show();
+           $j(jq_escape(layer.id+"_loading")).show();
        });
 
        layer.events.register("loadend", layer, function() {
-          $j("#"+layer.name+".loading").fadeOut();
+          $j(jq_escape(layer.id+"_loading")).fadeOut();
        });
    }
+   
+function jq_escape(myid) { 
+  return '#' + myid.replace(/(:|\.)/g,'\\$1');
+}

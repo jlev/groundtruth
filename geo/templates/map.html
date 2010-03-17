@@ -36,8 +36,32 @@
           </div>
         </div><-->
         <div class="right_menu_item">
+         <a class="toggle" id="legend_toggle">Legend</a>
+         <div id="legend">
+           <b>Borders and Barriers</b>
+           <table cellspacing="10">
+             <tr><td align="center"><img src='{{MEDIA_URL}}map/icons/green-line-solid.png'></td><td>Green Line</td></tr>
+             <tr><td align="center"><img src='{{MEDIA_URL}}map/icons/red-line-solid.png'></td><td>Separation Barrier (complete)</td></tr>
+             <tr><td align="center"><img src='{{MEDIA_URL}}map/icons/purple-line-solid.png'></td><td>Separation Barrier (planned)</td></tr>
+             <tr><td align="center"><img src='{{MEDIA_URL}}map/icons/black-line-dashed.png'></td><td>Separation Barrier (removed)</td></tr>
+          </table>
+          <b>Localities</b>
+          <table cellspacing="5">
+            <tr><td align="center"><img src='{{MEDIA_URL}}map/icons/settlement.png'></td><td>Settlement</td></tr>
+            <tr><td align="center"><img src='{{MEDIA_URL}}map/icons/palestinian.png'></td><td>Palestinian Towns</td></tr>
+          </table>
+          <b>Checkpoints</b>
+          <table cellspacing="5">
+            <tr><td align="center"><img src='{{MEDIA_URL}}map/icons/checkpoint.png'></td><td>Checkpoint</td></tr>
+            <tr><td align="center"><img src='{{MEDIA_URL}}map/icons/watchtower.png'></td><td>Observation Tower</td></tr>
+            <tr><td align="center"><img src='{{MEDIA_URL}}map/icons/dco.gif'></td><td>District Coordination Office</td></tr>
+          </table>
+        </div>
+        </div>
+        
+        <div class="right_menu_item">
           <a class="toggle" id="share_toggle">Share</a>
-          <div class="share_fields">
+          <div id="share_fields">
             <input type="text" id="share_URL" />
             <input type="text" id="share_iFrame" />
             <!-- AddThis Button BEGIN -->
@@ -86,6 +110,10 @@
               $j(this).next().toggle('fast');
               return false;
             });
+            
+            //some start closed
+            //$j('#legend').toggle();
+            $j('#share_fields').toggle();
 
             //fill in share fields with map info, updating on every map move
               function mapCoordsToShareFields(e) {

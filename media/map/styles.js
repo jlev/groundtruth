@@ -23,17 +23,17 @@ barrierStyleMap.addUniqueValueRules("select", "construction", barrierStyleLookup
 var checkpointStyleMap = new OpenLayers.StyleMap(
   {pointRadius: 10,
   fillOpacity:1,
-  externalGraphic:"/media/map/icons/checkpoint.gif",
+  externalGraphic:"/media/map/icons/checkpoint.png",
   strokeColor:'#FF0000'});
 var checkpointStyleLookup = {
-  "Checkpoint": {externalGraphic:"/media/map/icons/checkpoint.gif"},
-  "Earth Mound": {externalGraphic:"/media/map/icons/checkpoint.gif"},
-  "Observation Tower": {externalGraphic:"/media/map/icons/tower.gif"},
-  "DCO": {externalGraphic:"/media/map/icons/dco.png"},
-  "Partial Checkpoint": {externalGraphic:"/media/map/icons/checkpoint.gif"},
-  "Road Block": {externalGraphic:"/media/map/icons/checkpoint.gif"},
-  "Road Gate": {externalGraphic:"/media/map/icons/checkpoint.gif"},
-  "Agricultural Gate": {externalGraphic:"/media/map/icons/checkpoint.gif"}
+  "Checkpoint": {externalGraphic:"/media/map/icons/checkpoint.png"},
+  "Earth Mound": {externalGraphic:"/media/map/icons/checkpoint.png"},
+  "Observation Tower": {externalGraphic:"/media/map/icons/watchtower.png"},
+  "DCO": {externalGraphic:"/media/map/icons/dco.gif"},
+  "Partial Checkpoint": {externalGraphic:"/media/map/icons/checkpoint.png"},
+  "Road Block": {externalGraphic:"/media/map/icons/checkpoint.png"},
+  "Road Gate": {externalGraphic:"/media/map/icons/checkpoint.png"},
+  "Agricultural Gate": {externalGraphic:"/media/map/icons/checkpoint.png"}
 };
 checkpointStyleMap.addUniqueValueRules("default", "checkpoint_type", checkpointStyleLookup);
 checkpointStyleMap.addUniqueValueRules("select", "checkpoint_type", checkpointStyleLookup);
