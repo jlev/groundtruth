@@ -86,6 +86,7 @@ function initMap(){
                                                 projection:israeltm,
                                                 styleMap:osloAStyleMap,
                                                 visibility:false,
+                                                infoLink:'/palestinian/info',
                                                 loadingImg:true});
     registerEvents(palestinian);
     map.addLayer(palestinian);
