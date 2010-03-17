@@ -1,7 +1,7 @@
 from django.db import models
 from django.contrib.contenttypes.models import ContentType
 
-GEO_MODELS = {"model__in": ("settlement","region","barrier","checkpoint","border")}
+GEO_MODELS = {"model__in": ("settlement","region","barrier","checkpoint","border","palestinian")}
 
 class Source(models.Model):
     '''A name, url and date'''

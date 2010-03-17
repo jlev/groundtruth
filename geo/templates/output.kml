@@ -1,0 +1,48 @@
+{% extends "gis/kml/base.kml" %}
+
+{%block name %}{{name}}{%endblock%}
+
+{% block placemarks %}
+
+<Style id="settlement">
+	<LineStyle>
+		<width>0</width>
+	</LineStyle>
+	<PolyStyle>
+		<color>80660000</color>
+	</PolyStyle>
+</Style>
+
+<Style id="palestinian">
+	<LineStyle>
+		<color>ff000000</color>
+	</LineStyle>
+	<PolyStyle>
+		<color>80809eb7</color>
+	</PolyStyle>
+</Style>
+
+<Style id="border">
+	<LineStyle>
+		<color>ff006600</color>
+		<width>5</width>
+	</LineStyle>
+</Style>
+
+<Style id="barrier">
+	<LineStyle>
+		<color>ff000000</color>
+	</LineStyle>
+</Style>
+
+{% for place in places %}
+  <Placemark>
+    <name>{{place.name}}</name>
+    <description>{{place.description}}</description>
+	<styleUrl>#{{place.style}}</styleUrl>
+    {{ place.kml|safe }}
+  </Placemark>
+{% endfor %}
+
+{% endblock %}
+
