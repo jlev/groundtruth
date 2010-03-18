@@ -7,6 +7,3 @@
   <li><b>Area:</b> {% if settlement.area %}{{settlement.area}}{%else%}?{%endif%} square km
   <li><b>Region:</b> <a href="{{settlement.region.get_absolute_url}}" target="_blank">{{settlement.region}}</a>
 </ul>
-<div style="float:left">
-<a href="{{settlement.get_absolute_url}}" target="_blank">more info</a>
-</div>

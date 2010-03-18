@@ -1,11 +1,8 @@
 <em>Checkpoint</em>
 <ul>
-  <li><b>Name:</b> {{checkpoint.name|default_if_none:"Unnamed"}}
+  <li><b>Name:</b> <a href="/checkpoint/{{checkpoint.id}}/" target="_blank">{{checkpoint.name|default_if_none:"Unnamed"}}</a>
   {% if checkpoint.region %}<li><b>Region:</b> {{checkpoint.region}}{%endif%}
   <li><b>Type:</b> {{checkpoint.get_checkpoint_type_display}}
   <li><b>Direction:</b> {{checkpoint.get_direction_display}}
   <li><b>Staffed:</b> {{checkpoint.staffed|default_if_none:"unknown"}}
 </ul>
-<div style="float:left">
-<a href="/checkpoint/{{checkpoint.id}}/" target="_blank">more info</a>
-</div>
