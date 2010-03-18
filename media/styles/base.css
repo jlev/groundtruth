@@ -47,6 +47,7 @@ h1#logo a:hover {
 
 #right_menu {
     float:right;
+    clear:none;
     margin-right:45px;
     width:150px;
     background:white;
@@ -61,7 +62,7 @@ h1#logo a:hover {
 }
 
 #bottom {
-    position:absolute;
+    float:left;
     bottom:5px;
     left:5px;
     font-size:10pt;
