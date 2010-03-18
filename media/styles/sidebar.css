@@ -18,6 +18,7 @@ a.toggle {
 
 .layerinfolink {
     float:right;
+    clear:none;
 }
 
 .defaultText {

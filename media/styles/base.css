@@ -46,7 +46,8 @@ h1#logo a:hover {
 }
 
 #right_menu {
-    float:left;
+    float:right;
+    margin-right:45px;
     width:150px;
     background:white;
     z-index:2000;
