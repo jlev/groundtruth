@@ -14,6 +14,13 @@
     {%block content%}
       <div id="map"></div>
       
+      <div id="bottom"><p>Click objects on the map for more information.</p>
+        <br>
+        <p>This site is under development, and may not work well in Internet Explorer.</p>
+        <a class="contact" href="http://jlev.media.mit.edu" target="_blank">jlev@media.mit.edu</a><br>
+        <a class="contact" href="/admin">login</a>
+      </div>
+      
       <div id="right_menu">
         <div class="right_menu_item">
           <a class="toggle">Layers</a>
@@ -27,14 +34,7 @@
             <a href="/settlement/">List all Settlements</a>
           </div>
         </div>
-       <!--> <div class="right_menu_item">
-          <a class="toggle">Directions</a>
-          <div class="search_fields">
-            <input class="defaultText" type="text" id="from" title="From" />
-            <input class="defaultText" type="text" id="from" title="To" />
-            <button type="submit" id="routingButton" title="Route">Go</button>
-          </div>
-        </div><-->
+        
         <div class="right_menu_item">
          <a class="toggle" id="legend_toggle">Legend</a>
          <div id="legend">
@@ -89,8 +89,8 @@
       <script type="text/javascript" src="{{MEDIA_URL}}map/map.js"></script>
       
       
-      <script type"text/javascript">
-      $j(document).ready(function() {
+      <script language="javascript">
+      jQuery(function() {
         {% if lat and lon and zoom %}
           initMapCoords({{lat}},{{lon}},{{zoom}});
         {%else%}
@@ -202,7 +202,7 @@
             cluetipClass:'jtip',
             dropShadow:false,
             activation:'click',
-            attribute:'href',
+            attribute:'href'
           });
       });
       </script>
