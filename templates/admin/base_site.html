@@ -1,0 +1,15 @@
+{% extends "admin/base.html" %}
+{% load i18n %}
+
+{% block extrahead %}
+<script type="text/javascript" src="http://ajax.googleapis.com/ajax/libs/jquery/1.4/jquery.min.js"></script>
+<script type="text/javascript" src="{{MEDIA_URL}}jquery/admin-map.js"></script>
+{% endblock %}
+
+{% block title %}{{ title }} | {% trans 'GroundTruth site admin' %}{% endblock %}
+
+{% block branding %}
+<h1 id="site-name">{% trans 'GroundTruth administration' %}</h1>
+{% endblock %}
+
+{% block nav-global %}{% endblock %}

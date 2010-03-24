@@ -14,6 +14,8 @@
  *  Base namespace and utility functions
  */
 var olwidget = {
+    maps: new Array(),
+  
     /*
      * WKT transformations
      */
@@ -169,7 +171,7 @@ var olwidget = {
 olwidget.BaseMap = OpenLayers.Class(OpenLayers.Map, {
     initialize: function(mapDivID, options) {
         this.opts = this.initOptions(options);
-        this.initMap(mapDivID, this.opts);
+        olwidget.maps.push(this.initMap(mapDivID, this.opts));
     },
     /*
      * Extend the passed in options with defaults, and create unserialized
@@ -253,6 +255,7 @@ olwidget.BaseMap = OpenLayers.Class(OpenLayers.Map, {
         layers.push(this.vectorLayer);
         this.addLayers(layers);
         this.setDefaultCenter();
+        return this;
     },
     setDefaultCenter: function() {
         this.setCenter(this.opts.default_center.clone(), this.opts.defaultZoom);
