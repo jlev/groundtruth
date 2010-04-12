@@ -1,6 +1,6 @@
 <em>Palestinian Area</em>
 <ul>
-  <li><b>Name:</b> <a href="{{town.get_absolute_url}}" target="_blank">{{town.name}}</a>
+  <li><b>Name:</b> <a href="http://groundtruth.media.mit.edu{{town.get_absolute_url}}" target="_blank">{{town.name}}</a>
   <li><b>Population:</b> {% if town.population %}{{town.most_recent_population.0}} ({{town.most_recent_population.1}}){%else%}?{%endif%}
   {% if town.area %}<li><b>Area:</b> {{town.area}} km sq{%endif%}
 </ul>
