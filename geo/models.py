@@ -112,6 +112,8 @@ class Region(models.Model):
         return self.name
     def get_absolute_url(self):
         return "/region/%i/" % self.id
+    class Meta:
+        ordering = ['name']
 
 class Barrier(models.Model):
     BARRIER_MAKEUP_CHOICES = (
