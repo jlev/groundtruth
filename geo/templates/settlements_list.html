@@ -19,7 +19,7 @@
       <tbody>
       {% for settlement in settlements %}
       <tr>
-        <td><a href="/settlement/{{settlement.id}}/">{{settlement.name}}</a>{%if settlement.alternate_name%}, {{settlement.alternate_name}}{%endif%}</td>
+        <td><a href="/settlement/{{settlement.id}}/">{{settlement.name}}</a>{%if settlement.alternate_name%}, ({{settlement.alternate_name}}){%endif%}</td>
         <td>{{settlement.get_settlement_type_display}}</td>
         <td>{{settlement.year_founded|default:""}}</td>
       </tr>

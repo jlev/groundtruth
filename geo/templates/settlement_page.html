@@ -39,7 +39,7 @@
 
 {%block content %}
     <ul>
-      <li><b>Name:</b> {{settlement.name}} {%if settlement.alternate_name%},{{settlement.alternate_name}}{%endif%}
+      <li><b>Name:</b> {{settlement.name}}{%if settlement.alternate_name%}, ({{settlement.alternate_name}}){%endif%}
       <li><b>Type:</b> {{settlement.get_settlement_type_display}}
       <li><b>Year Founded:</b> {{settlement.year_founded|default:"unknown"}}
       <li><b>Description:</b>{{settlement.info|linebreaks}}

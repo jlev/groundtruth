@@ -129,6 +129,9 @@ def search(request):
     except KeyError:
         return HttpResponse("No query string", mimetype='text/plain')
     settlements = Settlement.objects.filter(name__istartswith=query)
+    settlements_alternate = Settlement.objects.filter(alternate_name__istartswith=query)
+    print settlements_alternate
+    
     palestinian = Palestinian.objects.filter(name__istartswith=query)
     
     r = []
@@ -137,11 +140,14 @@ def search(request):
     for s in settlements:
         geo = geojson_base(SPHERICAL_MERCATOR,s.center,{'name':str(s.name),'id':s.id})
         r.append("%s|%s|%s" % (s.name,s.get_absolute_url(),json.dumps(geo)))
+    for s in settlements_alternate:
+        geo = geojson_base(SPHERICAL_MERCATOR,s.center,{'name':str(s.name),'id':s.id})
+        r.append("%s, (%s)|%s|%s" % (s.name,s.alternate_name,s.get_absolute_url(),json.dumps(geo)))
     if len(palestinian) > 0:
         r.append("<div class='ac_header'>Palestinian Areas</div>")
-    for p in palestinian:
-        geo = geojson_base(SPHERICAL_MERCATOR,p.center,{'name':str(p.name),'id':p.id})
-        r.append("%s|%s|%s" % (p.name,p.get_absolute_url(),json.dumps(geo)))
+        for p in palestinian:
+            geo = geojson_base(SPHERICAL_MERCATOR,p.center,{'name':str(p.name),'id':p.id})
+            r.append("%s|%s|%s" % (p.name,p.get_absolute_url(),json.dumps(geo)))
     return HttpResponse('\n'.join(r), mimetype='text/plain')
     
 def settlement_popup(request,id):
