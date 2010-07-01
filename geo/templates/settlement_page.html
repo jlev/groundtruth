@@ -46,6 +46,7 @@
       <li><b>Region:</b> <a href="{{settlement.region.get_absolute_url}}">{{settlement.region}}</a>
       <li><b>Population:</b> {% if settlement.population %}<div id="populationgraph"></div>{%else%}Unknown{%endif%}
       {% if settlement.area %}<li><b>Area:</b>{{settlement.area}} square km{%endif%}
+      <li><b>Distance:</b> {{settlement.km_from_border}} km from green line
       <li><b>Map:</b><div id="mapwrapper"><div id="map"></div><div id="layerswitcher"><b>Layers</b></div></li>
       <li><b>Legal:</b>{{settlement.legal|linebreaks}}
     </ul>

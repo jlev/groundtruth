@@ -87,6 +87,12 @@ class Settlement(Locality):
     def save(self):
         self.center = self.boundary.centroid
         self.save_base(force_insert=False, force_update=False)
+    def distance_from_border(self):
+        b = Border.objects.distance(self.center).order_by('distance')
+        return b[0].distance
+    def km_from_border(self):
+        k = self.distance_from_border().km
+        return "%.1f" % k
     class Meta:
         ordering = ['name']
 

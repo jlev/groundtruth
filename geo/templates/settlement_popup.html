@@ -6,4 +6,5 @@
   <li><b>Year Founded:</b> {% if settlement.year_founded %}{{settlement.year_founded}}{%else%}?{%endif%}
   <li><b>Area:</b> {% if settlement.area %}{{settlement.area}}{%else%}?{%endif%} square km
   <li><b>Region:</b> <a href="http://groundtruth.media.mit.edu{{settlement.region.get_absolute_url}}" target="_blank">{{settlement.region}}</a>
+  <li><b>Distance:</b> {{settlement.km_from_border}} km
 </ul>
